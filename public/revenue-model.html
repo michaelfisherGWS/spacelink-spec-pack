@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpaceLink — Revenue Model & Rate Calculators</title>
+<style>
+  :root{
+    --ink:#0f2330;
+    --ink-soft:#3a5160;
+    --surface:#eef2f3;
+    --card:#ffffff;
+    --line:#dde5e7;
+    --line-soft:#eaf0f1;
+    --primary:#0c6b78;
+    --primary-deep:#084f59;
+    --primary-tint:#e3f0f1;
+    --money:#c47a00;
+    --money-tint:#fbf0db;
+    --pos:#1f8a5b;
+    --warn:#b4502a;
+    --shadow:0 1px 2px rgba(15,35,48,.06),0 8px 28px rgba(15,35,48,.06);
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    background:var(--surface);
+    color:var(--ink);
+    line-height:1.5;
+    font-size:15px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+  /* ---------- header ---------- */
+  header.top{
+    background:var(--ink);
+    color:#fff;
+    padding:18px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(115deg,transparent 0 62%,rgba(12,107,120,.35) 62% 64%,transparent 64%),
+                     linear-gradient(115deg,transparent 0 70%,rgba(196,122,0,.28) 70% 71.5%,transparent 71.5%);
+    pointer-events:none;
+  }
+  .wrap{max-width:1180px;margin:0 auto}
+  .brand{display:flex;align-items:baseline;gap:12px;position:relative;z-index:1}
+  .brand .mark{
+    font-weight:800;letter-spacing:-.5px;font-size:1.45rem;
+  }
+  .brand .mark span{color:#3fb6c4}
+  .brand .tag{color:#9fc0c6;font-size:.82rem;letter-spacing:.02em}
+  .lede{position:relative;z-index:1;color:#c7d8db;max-width:70ch;margin-top:6px;font-size:.9rem}
+
+  /* ---------- tabs ---------- */
+  .tabs{background:var(--ink);padding:0 22px;border-bottom:1px solid rgba(255,255,255,.08)}
+  .tabs .wrap{display:flex;gap:4px;flex-wrap:wrap}
+  .tab{
+    appearance:none;border:0;background:transparent;color:#9fc0c6;
+    padding:13px 18px 12px;font-size:.92rem;font-weight:600;cursor:pointer;
+    border-bottom:3px solid transparent;font-family:inherit;letter-spacing:.01em;
+    transition:color .15s;
+  }
+  .tab:hover{color:#dceef0}
+  .tab[aria-selected="true"]{color:#fff;border-bottom-color:#3fb6c4}
+  .tab .lbl{display:block;font-size:.7rem;font-weight:600;color:#6f969d;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1px}
+  .tab[aria-selected="true"] .lbl{color:#3fb6c4}
+
+  main{max-width:1180px;margin:0 auto;padding:24px 22px 60px}
+  .view{display:none}
+  .view.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:22px;align-items:start}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .panel-h{padding:16px 18px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .panel-h h2{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+  .panel-b{padding:18px}
+
+  .field{margin-bottom:16px}
+  .field:last-child{margin-bottom:0}
+  label.fl{display:block;font-size:.82rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+  label.fl .hint{display:block;font-weight:400;color:var(--ink-soft);font-size:.76rem;margin-top:1px}
+  input[type=number],select{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;
+    font-family:inherit;font-size:.95rem;color:var(--ink);background:#fff;
+  }
+  input[type=number]{font-variant-numeric:tabular-nums}
+  input:focus,select:focus{outline:2px solid var(--primary);outline-offset:0;border-color:var(--primary)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+  .rng{display:flex;align-items:center;gap:10px}
+  .rng input[type=range]{flex:1;accent-color:var(--primary)}
+  .rng output{font-variant-numeric:tabular-nums;font-weight:700;min-width:48px;text-align:right;color:var(--primary-deep)}
+
+  .toggles{display:flex;flex-wrap:wrap;gap:8px}
+  .tog{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:.82rem;cursor:pointer;user-select:none;background:#fff}
+  .tog input{accent-color:var(--primary)}
+  .tog.on{background:var(--primary-tint);border-color:var(--primary)}
+
+  /* ---------- outputs ---------- */
+  .headline{display:flex;flex-wrap:wrap;gap:18px;padding:6px 2px 18px}
+  .big{flex:1;min-width:160px}
+  .big .k{font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  .big .v{font-size:2.1rem;font-weight:800;letter-spacing:-1px;line-height:1.1;margin-top:3px;font-variant-numeric:tabular-nums}
+  .big .v.money{color:var(--primary-deep)}
+  .big .v.gold{color:var(--money)}
+  .big .sub{font-size:.8rem;color:var(--ink-soft);margin-top:2px}
+
+  /* rate meter */
+  .meter{margin:6px 0 4px}
+  .meter .scale{position:relative;height:46px;margin-top:22px}
+  .meter .bar{position:absolute;top:14px;left:0;right:0;height:8px;border-radius:4px;background:linear-gradient(90deg,#cfe6e8,#0c6b78)}
+  .meter .band{position:absolute;top:9px;height:18px;border-radius:5px;background:rgba(196,122,0,.22);border:1px solid var(--money)}
+  .meter .pin{position:absolute;top:4px;width:2px;height:28px;background:var(--ink)}
+  .meter .pin::after{content:attr(data-l);position:absolute;top:-20px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:.72rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+  .meter .ends{display:flex;justify-content:space-between;font-size:.74rem;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+
+  /* waterfall / layers */
+  .layers{display:flex;flex-direction:column;gap:1px;background:var(--line-soft);border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+  .lyr{background:#fff;padding:12px 14px;display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center}
+  .lyr .no{width:26px;height:26px;border-radius:7px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+  .lyr .nm{font-weight:600;font-size:.9rem}
+  .lyr .nm small{display:block;font-weight:400;color:var(--ink-soft);font-size:.74rem}
+  .lyr .amt{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+  .lyr.total{background:var(--ink);color:#fff}
+  .lyr.total .nm{font-size:.95rem}
+  .lyr.total .amt{color:#5fd0dd;font-size:1.05rem}
+  .lyr .barwrap{grid-column:1/-1;height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden;margin-top:2px}
+  .lyr .barwrap i{display:block;height:100%;background:var(--primary);border-radius:3px}
+
+  table.t{width:100%;border-collapse:collapse;font-size:.86rem}
+  table.t th,table.t td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line-soft);font-variant-numeric:tabular-nums}
+  table.t th:first-child,table.t td:first-child{text-align:left;font-variant-numeric:normal}
+  table.t thead th{font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;border-bottom:1px solid var(--line)}
+  table.t tr.hl td{background:var(--primary-tint);font-weight:700}
+
+  .note{font-size:.8rem;color:var(--ink-soft);background:var(--line-soft);border-radius:9px;padding:11px 13px;margin-top:14px}
+  .note b{color:var(--ink)}
+  .when{font-size:.76rem;color:var(--primary-deep);background:var(--primary-tint);border-radius:7px;padding:8px 11px;margin-top:12px}
+
+  .guide{margin-top:14px}
+  .guide h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px}
+  .guide ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .guide li{font-size:.86rem;padding-left:18px;position:relative}
+  .guide li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:2px;background:var(--money);transform:rotate(45deg)}
+
+  .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .pill{font-size:.74rem;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--money-tint);color:var(--money)}
+
+  .foot{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--ink-soft);font-size:.78rem}
+  .foot code{background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:.92em}
+</style>
+</head>
+<body>
+<a href="index.html" style="position:fixed;top:14px;left:14px;z-index:9999;display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:7px 14px;font-family:Inter,-apple-system,sans-serif;font-weight:600;font-size:13px;color:#4f46e5;text-decoration:none;box-shadow:0 2px 8px rgba(16,24,40,.12)">&larr; Spec Pack</a>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark">Space<span>Linq</span></div>
+      <div class="tag">Revenue Model &amp; Rate Calculators · NZ</div>
+    </div>
+    <p class="lede">One engine, three views. Model the platform's own revenue, or give providers and seekers a free calculator for what they should earn and pay — all driven by the same New Zealand market rates so the numbers always agree.</p>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Calculator views">
+  <div class="wrap">
+    <button class="tab" role="tab" aria-selected="true" data-view="platform"><span class="lbl">Your side</span>Platform revenue model</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="provider"><span class="lbl">Free tool</span>Provider earnings</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="seeker"><span class="lbl">Free tool</span>Seeker cost estimate</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ================= PLATFORM ================= -->
+  <section class="view active" id="view-platform">
+    <div class="grid">
+      <div class="panel">
+        <div class="panel-h"><h2>Inputs · what's flowing through the platform</h2></div>
+        <div class="panel-b">
+
+          <div class="field">
+            <label class="fl">Active bookings by deal size <span class="hint">How many live rentals sit in each monthly-value band. This is where the take-rate tiers apply.</span></label>
+            <table class="t" id="tierTable">
+              <thead><tr><th>Monthly value band</th><th>Bookings</th><th>Avg $/mo</th><th>Take %</th></tr></thead>
+              <tbody><!-- filled by JS --></tbody>
+            </table>
+          </div>
+
+          <div class="field">
+            <label class="fl">Provider subscriptions <span class="hint">Recurring monthly — billed regardless of bookings.</span></label>
+            <div class="row2">
+              <div><input type="number" id="p_pro_n" value="40"><div class="big"><div class="sub">Professional @ $<input style="width:64px;display:inline;padding:4px 6px" type="number" id="p_pro_price" value="199">/mo</div></div></div>
+              <div><input type="number" id="p_ent_n" value="8"><div class="big"><div class="sub">Enterprise @ $<input style="width:64px;display:inline;padding:4px 6px" type="number" id="p_ent_price" value="999">/mo</div></div></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="fl">Featured listings <span class="hint">Providers paying for placement this month.</span></label>
+            <div class="row2">
+              <div><input type="number" id="feat_n" value="60"><div class="sub">listings</div></div>
+              <div><input type="number" id="feat_price" value="149"><div class="sub">$ each / month</div></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="fl">Insurance &amp; security attach <span class="hint">Share of bookings that add a paid service, and your margin on it.</span></label>
+            <div class="row3">
+              <div><input type="number" id="ins_pct" value="30"><div class="sub">% attach</div></div>
+              <div><input type="number" id="ins_prem" value="35"><div class="sub">avg $/mo</div></div>
+              <div><input type="number" id="ins_margin" value="20"><div class="sub">% margin</div></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="fl">Advertising / retail media <span class="hint">Monthly ad income. Scales with traffic — leave low until Phase 2.</span></label>
+            <input type="number" id="ad_rev" value="6000">
+          </div>
+
+          <div class="field">
+            <label class="fl">Next-gen streams <span class="hint">Energy, digital custody, circular economy. Optional, long-horizon.</span></label>
+            <input type="number" id="ng_rev" value="0">
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><h2>Platform revenue</h2><span class="pill" id="gmvPill"></span></div>
+        <div class="panel-b">
+          <div class="headline">
+            <div class="big"><div class="k">Monthly revenue</div><div class="v money num" id="plat_mo">—</div><div class="sub" id="plat_take"></div></div>
+            <div class="big"><div class="k">Annualised</div><div class="v gold num" id="plat_yr">—</div><div class="sub">at the current run-rate</div></div>
+          </div>
+
+          <div class="layers" id="layerList"></div>
+
+          <div class="when"><b>When revenue is attributed:</b> commission lands the moment each booking is paid and recurs monthly while the rental is live · subscriptions &amp; featured slots bill on their monthly date · insurance/security accrues monthly alongside the active rental · ads are earned as delivered.</div>
+
+          <div class="note" id="plat_insight"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROVIDER ================= -->
+  <section class="view" id="view-provider">
+    <div class="grid">
+      <div class="panel">
+        <div class="panel-h"><h2>Provider · what could I earn?</h2></div>
+        <div class="panel-b">
+          <div class="field">
+            <label class="fl">What are you offering?</label>
+            <select id="pv_type"></select>
+          </div>
+          <div class="field">
+            <label class="fl">Region</label>
+            <select id="pv_region"></select>
+          </div>
+          <div class="field">
+            <label class="fl" id="pv_caplabel">Capacity</label>
+            <input type="number" id="pv_cap" value="200">
+          </div>
+          <div class="field">
+            <label class="fl">Expected occupancy <span class="hint">How full you keep it on average.</span></label>
+            <div class="rng"><input type="range" id="pv_util" min="10" max="100" step="5" value="80"><output id="pv_util_o">80%</output></div>
+          </div>
+          <div class="field">
+            <label class="fl">Mostly short-term or long-term? <span class="hint">Short-term earns a higher rate per unit; long-term trades rate for stability.</span></label>
+            <select id="pv_term">
+              <option value="1.1">Mostly short-term (casual, higher rate)</option>
+              <option value="1.0" selected>Mixed</option>
+              <option value="0.92">Mostly long-term (lower rate, steady)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="fl">Features you provide</label>
+            <div class="toggles" id="pv_feats"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><h2>Your earning potential</h2><span class="pill" id="pv_unitpill"></span></div>
+        <div class="panel-b">
+          <div class="meter">
+            <div class="ends"><span>Market low</span><span>Suggested rate</span><span>Market high</span></div>
+            <div class="scale">
+              <div class="bar"></div>
+              <div class="band" id="pv_band"></div>
+              <div class="pin" id="pv_pin" data-l=""></div>
+            </div>
+          </div>
+
+          <div class="headline" style="border-top:1px solid var(--line-soft);margin-top:6px">
+            <div class="big"><div class="k">Gross / month</div><div class="v money num" id="pv_gross">—</div><div class="sub" id="pv_ratesub"></div></div>
+            <div class="big"><div class="k">You keep / month</div><div class="v gold num" id="pv_net">—</div><div class="sub" id="pv_netsub"></div></div>
+          </div>
+
+          <table class="t" id="pv_scen">
+            <thead><tr><th>Occupancy scenario</th><th>Gross / mo</th><th>SpaceLinq fee</th><th>You keep / mo</th><th>You keep / yr</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="note" id="pv_note"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SEEKER ================= -->
+  <section class="view" id="view-seeker">
+    <div class="grid">
+      <div class="panel">
+        <div class="panel-h"><h2>Seeker · what should I pay?</h2></div>
+        <div class="panel-b">
+          <div class="field">
+            <label class="fl">What do you need to store?</label>
+            <select id="sk_type"></select>
+          </div>
+          <div class="field">
+            <label class="fl">Region</label>
+            <select id="sk_region"></select>
+          </div>
+          <div class="field">
+            <label class="fl" id="sk_caplabel">How much space?</label>
+            <input type="number" id="sk_cap" value="120">
+          </div>
+          <div class="field">
+            <label class="fl">For how long?</label>
+            <div class="rng"><input type="range" id="sk_months" min="1" max="36" step="1" value="12"><output id="sk_months_o">12 mo</output></div>
+          </div>
+          <div class="field">
+            <label class="fl">Add goods cover? <span class="hint">Optional protection priced through the platform.</span></label>
+            <div class="toggles">
+              <label class="tog" id="sk_ins_tog"><input type="checkbox" id="sk_ins"> Insure my goods</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><h2>What this should cost</h2><span class="pill" id="sk_unitpill"></span></div>
+        <div class="panel-b">
+          <div class="meter">
+            <div class="ends"><span>Budget end</span><span>Typical</span><span>Premium</span></div>
+            <div class="scale">
+              <div class="bar"></div>
+              <div class="band" id="sk_band"></div>
+              <div class="pin" id="sk_pin" data-l=""></div>
+            </div>
+          </div>
+
+          <div class="headline" style="border-top:1px solid var(--line-soft);margin-top:6px">
+            <div class="big"><div class="k">Estimated / month</div><div class="v money num" id="sk_mo">—</div><div class="sub" id="sk_ratesub"></div></div>
+            <div class="big"><div class="k">Total over term</div><div class="v gold num" id="sk_total">—</div><div class="sub" id="sk_termsub"></div></div>
+          </div>
+
+          <table class="t">
+            <tbody id="sk_break"></tbody>
+          </table>
+
+          <div class="guide" id="sk_guide"><h3>What to look for</h3><ul></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="foot">
+  Rates are NZD benchmarks drawn from the SpaceLinq market research (Auckland baseline, regional multipliers applied) and are indicative starting points, not quotes. Adjust any figure to match what you see in your own data. The three views share one rate engine, so a provider's suggested rate and a seeker's expected cost for the same option always line up — the gap between them is where the platform earns.
+</div>
+
+<script>
+/* ---------------- RATE ENGINE ---------------- */
+// unit: how the rate is expressed. WK = per unit per week, MO = per unit per month.
+const WEEKS_PER_MONTH = 4.333;
+
+const TYPES = {
+  pallet_ambient:{label:"Ambient pallet storage", unit:"WK", unitName:"pallet", capLabel:"Number of pallet spaces", low:3.5, typ:4.5, high:5.5,
+    look:["Confirm whether handling (in/out) is included or charged per movement","Check minimum term and notice period","Ask about access hours and dock availability"]},
+  pallet_chilled:{label:"Chilled pallet (2–8°C)", unit:"WK", unitName:"pallet", capLabel:"Number of chilled pallet spaces", low:5.0, typ:6.5, high:8.0,
+    look:["Ask for temperature logging / audit trail","Check MPI registration if food-grade","Confirm backup power for the chiller"]},
+  pallet_frozen:{label:"Frozen pallet (-18°C)", unit:"WK", unitName:"pallet", capLabel:"Number of frozen pallet spaces", low:6.0, typ:8.0, high:10.0,
+    look:["Confirm continuous temperature monitoring","Check blast-freeze vs holding-only","MPI / HACCP compliance for food"]},
+  warehouse:{label:"Bulk warehouse floor (per m²)", unit:"MO", unitName:"m²", capLabel:"Floor area needed (m²)", low:9, typ:13, high:18,
+    look:["Clarify rate is per m² and what's included (power, racking)","Check clear stud height for stacking","Confirm outgoings / operating costs treatment"]},
+  container:{label:"Container / lockup storage", unit:"MO", unitName:"container", capLabel:"Number of containers", low:150, typ:250, high:400,
+    look:["Check ground-level vs stacked access","Confirm site security and gate hours","Ask about ventilation for sensitive goods"]},
+  selfunit:{label:"Self-storage unit", unit:"MO", unitName:"unit", capLabel:"Number of units", low:50, typ:130, high:280,
+    look:["Match unit size to what you actually need — don't overbuy","Check 24/7 access if you need it","Confirm whether insurance is required or optional"]},
+  community:{label:"Community / garage space", unit:"MO", unitName:"space", capLabel:"Number of spaces", low:20, typ:55, high:100,
+    look:["Confirm access arrangements with the host","Agree what the space can and can't hold","Check the platform's cover applies"]},
+  document:{label:"Document / archive box storage", unit:"MO", unitName:"box", capLabel:"Number of archive boxes", low:0.5, typ:1.2, high:2.5,
+    look:["Ask about retrieval turnaround and per-retrieval fees","Check secure destruction options","Confirm indexing / barcode tracking"]},
+  wine:{label:"Wine & spirits (per case)", unit:"MO", unitName:"case", capLabel:"Number of cases", low:1.5, typ:3, high:6,
+    look:["Confirm stable temperature and humidity","Check insurance valuation basis","Ask about handling for fragile stock"]},
+  dg:{label:"Dangerous goods / MPI premium (per m²)", unit:"MO", unitName:"m²", capLabel:"Floor area needed (m²)", low:14, typ:20, high:30,
+    look:["Verify the correct DG class licence is held","Check segregation and spill containment","Confirm MPI / HSNO compliance documentation"]}
+};
+
+const REGIONS = {
+  auckland:{label:"Auckland", m:1.00},
+  hamilton:{label:"Hamilton / Tauranga", m:0.86},
+  wellington:{label:"Wellington", m:0.80},
+  christchurch:{label:"Christchurch", m:0.70},
+  other:{label:"Other / regional", m:0.66}
+};
+
+const FEATURES = [
+  {id:"access",  label:"24/7 access",        m:0.05},
+  {id:"security",label:"Monitored security", m:0.08},
+  {id:"climate", label:"Climate control",    m:0.12},
+  {id:"compliance",label:"MPI / compliance certified", m:0.18},
+  {id:"valueadd",label:"Handling / value-add", m:0.10}
+];
+
+// provider commission share + seeker booking fee tiers (by monthly rental value)
+const PROVIDER_FEE = 0.04;            // 4% off the provider
+function seekerFeeRate(monthlyValue){ // tiered, capped at the top
+  if(monthlyValue < 500)    return 0.18;
+  if(monthlyValue < 2000)   return 0.13;
+  if(monthlyValue < 5000)   return 0.10;
+  if(monthlyValue < 15000)  return 0.06;
+  return 0.03;
+}
+
+const fmt = n => "$"+Math.round(n).toLocaleString("en-NZ");
+const fmt2 = n => "$"+ (Math.round(n*100)/100).toLocaleString("en-NZ",{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* monthly rate per unit, given type+region+features+termfactor */
+function unitRateMonthly(t, regionM, featM, termF, band){
+  const base = TYPES[t][band]; // low/typ/high
+  let r = base * regionM * featM * termF;
+  if(TYPES[t].unit === "WK") r *= WEEKS_PER_MONTH;
+  return r;
+}
+
+/* ---------------- TAB SWITCHING ---------------- */
+const tabs=[...document.querySelectorAll('.tab')];
+tabs.forEach(tb=>tb.addEventListener('click',()=>{
+  tabs.forEach(x=>x.setAttribute('aria-selected', x===tb));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+tb.dataset.view).classList.add('active');
+}));
+
+/* ---------------- POPULATE SELECTS ---------------- */
+function fillType(sel){ Object.entries(TYPES).forEach(([k,v])=>{ const o=document.createElement('option');o.value=k;o.textContent=v.label;sel.appendChild(o);});}
+function fillRegion(sel){ Object.entries(REGIONS).forEach(([k,v])=>{ const o=document.createElement('option');o.value=k;o.textContent=v.label;sel.appendChild(o);});}
+fillType(pv_type); fillType(sk_type); fillRegion(pv_region); fillRegion(sk_region);
+
+/* feature toggles for provider */
+const pvFeatWrap=document.getElementById('pv_feats');
+FEATURES.forEach(f=>{
+  const l=document.createElement('label');l.className='tog';l.innerHTML=`<input type="checkbox" data-m="${f.m}" value="${f.id}"> ${f.label}`;
+  l.querySelector('input').addEventListener('change',()=>{l.classList.toggle('on',l.querySelector('input').checked);calcProvider();});
+  pvFeatWrap.appendChild(l);
+});
+
+/* ---------------- PLATFORM TIER TABLE ---------------- */
+const TIERS=[
+  {label:"Under $500/mo",  n:120, avg:300,  rate:0.21},
+  {label:"$500–$2,000",    n:90,  avg:1100, rate:0.16},
+  {label:"$2,000–$5,000",  n:45,  avg:3200, rate:0.13},
+  {label:"$5,000–$15,000", n:18,  avg:8500, rate:0.085},
+  {label:"$15,000+",       n:5,   avg:24000,rate:0.04}
+];
+const tbody=document.querySelector('#tierTable tbody');
+TIERS.forEach((t,i)=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${t.label}</td>
+    <td><input type="number" data-k="n" data-i="${i}" value="${t.n}" style="width:64px;padding:5px 6px"></td>
+    <td><input type="number" data-k="avg" data-i="${i}" value="${t.avg}" style="width:74px;padding:5px 6px"></td>
+    <td><input type="number" data-k="rate" data-i="${i}" value="${(t.rate*100)}" style="width:54px;padding:5px 6px"></td>`;
+  tbody.appendChild(tr);
+});
+
+/* ---------------- PLATFORM CALC ---------------- */
+function calcPlatform(){
+  // read tiers
+  document.querySelectorAll('#tierTable input').forEach(inp=>{
+    const i=+inp.dataset.i, k=inp.dataset.k; let val=parseFloat(inp.value)||0;
+    if(k==='rate') val=val/100;
+    TIERS[i][k]=val;
+  });
+  let gmv=0, commission=0;
+  TIERS.forEach(t=>{ const g=t.n*t.avg; gmv+=g; commission+=g*t.rate; });
+
+  const proRev = (parseFloat(p_pro_n.value)||0)*(parseFloat(p_pro_price.value)||0)
+               + (parseFloat(p_ent_n.value)||0)*(parseFloat(p_ent_price.value)||0);
+  const featRev= (parseFloat(feat_n.value)||0)*(parseFloat(feat_price.value)||0);
+  const subFeat= proRev+featRev;
+
+  const totalBookings=TIERS.reduce((s,t)=>s+t.n,0);
+  const insRev=(totalBookings*(parseFloat(ins_pct.value)||0)/100)*(parseFloat(ins_prem.value)||0)*((parseFloat(ins_margin.value)||0)/100);
+
+  const adRev=parseFloat(ad_rev.value)||0;
+  const ngRev=parseFloat(ng_rev.value)||0;
+
+  const layers=[
+    {n:1,nm:"Transaction commission",sub:"split take across deal tiers",amt:commission},
+    {n:2,nm:"Subscriptions & featured",sub:"recurring provider revenue",amt:subFeat},
+    {n:3,nm:"Insurance & security margin",sub:"resold at a markup",amt:insRev},
+    {n:4,nm:"Advertising / retail media",sub:"earned as delivered",amt:adRev},
+    {n:5,nm:"Next-gen streams",sub:"energy · digital · circular",amt:ngRev}
+  ];
+  const total=layers.reduce((s,l)=>s+l.amt,0);
+  const max=Math.max(...layers.map(l=>l.amt),1);
+
+  // render
+  const list=document.getElementById('layerList');
+  list.innerHTML='';
+  layers.forEach(l=>{
+    const d=document.createElement('div');d.className='lyr';
+    d.innerHTML=`<div class="no">${l.n}</div>
+      <div class="nm">${l.nm}<small>${l.sub}</small></div>
+      <div class="amt">${fmt(l.amt)}</div>
+      <div class="barwrap"><i style="width:${(l.amt/max*100).toFixed(1)}%"></i></div>`;
+    list.appendChild(d);
+  });
+  const tot=document.createElement('div');tot.className='lyr total';
+  tot.innerHTML=`<div class="no" style="background:#3fb6c4;color:#08323a">∑</div><div class="nm">Total platform revenue / month</div><div class="amt">${fmt(total)}</div>`;
+  list.appendChild(tot);
+
+  plat_mo.textContent=fmt(total);
+  plat_yr.textContent=fmt(total*12);
+  const blended= gmv>0 ? (commission/gmv*100):0;
+  plat_take.textContent=`from ${fmt(gmv)} GMV · ${blended.toFixed(1)}% blended take`;
+  gmvPill.textContent=totalBookings.toLocaleString()+" active bookings";
+
+  const commPct=total>0?(commission/total*100):0;
+  plat_insight.innerHTML=`<b>Reading the mix:</b> commission is ${commPct.toFixed(0)}% of revenue right now. Early on you want that share high — it means the marketplace itself is working. As you grow, watch subscriptions, insurance margin and ads climb so you're not dependent on transaction volume alone. Doubling bookings in the two smallest tiers lifts revenue far less than converting a handful more $5k+ rentals — that's the case for chasing larger providers once liquidity is proven.`;
+}
+document.querySelectorAll('#view-platform input').forEach(i=>i.addEventListener('input',calcPlatform));
+
+/* ---------------- PROVIDER CALC ---------------- */
+function placePin(pinEl,bandEl,low,typ,high,value,label){
+  const lo=Math.min(low,value), hi=Math.max(high,value);
+  const span=hi-lo || 1;
+  const pct=v=>((v-lo)/span*100);
+  bandEl.style.left=pct(low)+"%"; bandEl.style.width=Math.max(pct(high)-pct(low),2)+"%";
+  pinEl.style.left=pct(value)+"%"; pinEl.dataset.l=label;
+}
+function calcProvider(){
+  const t=pv_type.value, reg=REGIONS[pv_region.value].m, termF=parseFloat(pv_term.value);
+  let featM=1; document.querySelectorAll('#pv_feats input:checked').forEach(c=>featM+=parseFloat(c.dataset.m));
+  // climate already baked into chilled/frozen — avoid double count
+  if((t==='pallet_chilled'||t==='pallet_frozen') && document.querySelector('#pv_feats input[value=climate]')?.checked){
+    featM-=0.12;
+  }
+  const cap=parseFloat(pv_cap.value)||0;
+  const util=parseFloat(pv_util.value)/100;
+  pv_util_o.textContent=Math.round(util*100)+"%";
+  pv_caplabel.textContent=TYPES[t].capLabel;
+  pv_unitpill.textContent="per "+TYPES[t].unitName;
+
+  const rTyp=unitRateMonthly(t,reg,featM,termF,'typ');
+  const rLow=unitRateMonthly(t,reg,featM,termF,'low');
+  const rHigh=unitRateMonthly(t,reg,featM,termF,'high');
+
+  placePin(pv_pin,pv_band,rLow,rTyp,rHigh,rTyp,fmt2(rTyp));
+
+  const gross=rTyp*cap*util;
+  const sFee=PROVIDER_FEE; // provider pays this share
+  const fee=gross*sFee;
+  const net=gross-fee;
+
+  pv_gross.textContent=fmt(gross);
+  pv_ratesub.textContent=`${fmt2(rTyp)}/${TYPES[t].unitName}·mo × ${cap} × ${Math.round(util*100)}% full`;
+  pv_net.textContent=fmt(net);
+  pv_netsub.textContent=`after ${(sFee*100).toFixed(0)}% SpaceLinq provider fee`;
+
+  // scenarios
+  const sc=[0.5,0.75,0.9,1.0];
+  const body=document.querySelector('#pv_scen tbody');body.innerHTML='';
+  sc.forEach(u=>{
+    const g=rTyp*cap*u, f=g*sFee, nt=g-f;
+    const tr=document.createElement('tr');
+    if(Math.abs(u-util)<0.001) tr.className='hl';
+    tr.innerHTML=`<td>${Math.round(u*100)}% occupancy</td><td>${fmt(g)}</td><td>${fmt(f)}</td><td>${fmt(nt)}</td><td>${fmt(nt*12)}</td>`;
+    body.appendChild(tr);
+  });
+
+  pv_note.innerHTML=`<b>How to read this:</b> the suggested rate sits at the market typical for your option in ${REGIONS[pv_region.value].label}, adjusted for the features you offer and your term mix. Pricing toward the high end only works if your occupancy holds — the scenario table shows that a fuller space at a fair rate almost always beats a premium rate sitting half empty.`;
+}
+document.querySelectorAll('#view-provider input, #view-provider select').forEach(i=>i.addEventListener('input',calcProvider));
+
+/* ---------------- SEEKER CALC ---------------- */
+const skInsTog=document.getElementById('sk_ins_tog');
+sk_ins.addEventListener('change',()=>{skInsTog.classList.toggle('on',sk_ins.checked);calcSeeker();});
+function calcSeeker(){
+  const t=sk_type.value, reg=REGIONS[sk_region.value].m;
+  const cap=parseFloat(sk_cap.value)||0;
+  const months=parseFloat(sk_months.value)||1;
+  sk_months_o.textContent=months+" mo";
+  sk_caplabel.textContent=TYPES[t].capLabel.replace("Number of","How many").replace("Floor area needed (m²)","How much floor area (m²)");
+  sk_unitpill.textContent="per "+TYPES[t].unitName;
+
+  // longer term nudges toward the budget end of the band
+  const termF = months>=12 ? 0.95 : months>=6 ? 1.0 : 1.05;
+  const rLow=unitRateMonthly(t,reg,1,termF,'low');
+  const rTyp=unitRateMonthly(t,reg,1,termF,'typ');
+  const rHigh=unitRateMonthly(t,reg,1,termF,'high');
+  placePin(sk_pin,sk_band,rLow,rTyp,rHigh,rTyp,fmt2(rTyp));
+
+  const base=rTyp*cap;                         // monthly space cost
+  const fee=base*seekerFeeRate(base);          // platform booking fee (tiered)
+  const ins= sk_ins.checked ? Math.max(15, base*0.02) : 0; // ~2%/mo of value, min $15
+  const monthly=base+fee+ins;
+  const totalTerm=monthly*months;
+
+  sk_mo.textContent=fmt(monthly);
+  sk_ratesub.textContent=`${fmt2(rTyp)}/${TYPES[t].unitName}·mo × ${cap}`;
+  sk_total.textContent=fmt(totalTerm);
+  sk_termsub.textContent=`over ${months} month${months>1?'s':''}`;
+
+  const rows=[
+    ["Space rental",fmt(base)+" /mo"],
+    [`SpaceLinq booking fee (${(seekerFeeRate(base)*100).toFixed(0)}%)`,fmt(fee)+" /mo"],
+  ];
+  if(ins>0) rows.push(["Goods cover (optional)",fmt(ins)+" /mo"]);
+  rows.push(["<b>Monthly all-in</b>,"+"<b>"+fmt(monthly)+" /mo</b>"]);
+  const body=document.getElementById('sk_break');body.innerHTML='';
+  rows.forEach(r=>{
+    const tr=document.createElement('tr');
+    if(r.length===1){const p=r[0].split(',');tr.innerHTML=`<td>${p[0]}</td><td>${p[1]}</td>`;tr.className='hl';}
+    else tr.innerHTML=`<td>${r[0]}</td><td>${r[1]}</td>`;
+    body.appendChild(tr);
+  });
+
+  const ul=document.querySelector('#sk_guide ul');ul.innerHTML='';
+  TYPES[t].look.forEach(g=>{const li=document.createElement('li');li.textContent=g;ul.appendChild(li);});
+  const li=document.createElement('li');
+  li.innerHTML=`Expect <b>${fmt2(rLow)}–${fmt2(rHigh)}</b> per ${TYPES[t].unitName} per month in ${REGIONS[sk_region.value].label}. Quotes far above this should come with a clear reason (location, compliance, handling).`;
+  ul.appendChild(li);
+}
+document.querySelectorAll('#view-seeker input, #view-seeker select').forEach(i=>i.addEventListener('input',calcSeeker));
+
+/* ---------------- INIT ---------------- */
+pv_cap.value=200; sk_cap.value=120;
+calcPlatform(); calcProvider(); calcSeeker();
+</script>
+</body>
+</html>

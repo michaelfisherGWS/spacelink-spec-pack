@@ -1,0 +1,4 @@
+# SpaceLink Spec Pack — Netlify config
+# Static HTML in public/ is served directly. No build step needed.
+[build]
+  publish = "public"

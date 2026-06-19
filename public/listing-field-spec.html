@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpaceLink · Listing Field Specification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#4f46e5; --purple:#7c3aed; --indigo-dark:#3730a3;
+    --grad:linear-gradient(135deg,#4f46e5,#7c3aed);
+    --bg:#f8fafc; --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb;
+    --card:#ffffff; --radius:12px;
+    --shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(248,250,252,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .row{max-width:860px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+  .back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--indigo);font-weight:600;font-size:.9rem}
+  .back:hover{color:var(--indigo-dark)}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.95rem;color:var(--ink)}
+  .logo{width:26px;height:26px;border-radius:7px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:800;font-size:.85rem}
+  .hero{background:var(--grad);color:#fff;padding:48px 0 54px}
+  .hero .row{max-width:860px;margin:0 auto;padding:0 24px}
+  .eyebrow{display:inline-block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;background:rgba(255,255,255,.18);padding:5px 11px;border-radius:999px;margin-bottom:14px}
+  .hero h1{font-size:2.1rem;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+  .hero .sub{margin-top:12px;font-size:1.04rem;color:rgba(255,255,255,.92);max-width:62ch}
+  main{max-width:860px;margin:0 auto;padding:44px 24px 10px}
+  .doc h1{font-size:1.6rem;font-weight:800;margin:34px 0 10px;letter-spacing:-.01em}
+  .doc h1:first-child{display:none}  /* title already in hero */
+  .doc h2{font-size:1.32rem;font-weight:800;margin:38px 0 8px;padding-top:10px;letter-spacing:-.01em}
+  .doc h3{font-size:1.08rem;font-weight:700;margin:26px 0 6px;color:var(--indigo-dark)}
+  .doc p{margin:12px 0}
+  .doc ul,.doc ol{margin:12px 0 12px 22px}
+  .doc li{margin:5px 0}
+  .doc strong{color:var(--ink);font-weight:700}
+  .doc em{color:var(--muted)}
+  .doc a{color:var(--indigo);font-weight:500}
+  .doc hr{border:0;border-top:1px solid var(--line);margin:30px 0}
+  .doc table{width:100%;border-collapse:collapse;margin:20px 0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-size:.92rem}
+  .doc th,.doc td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  .doc th{background:#f9fafb;font-size:.76rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700}
+  .doc tr:last-child td{border-bottom:0}
+  .doc blockquote{border-left:4px solid var(--purple);background:#faf5ff;border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0;color:#4b5563;font-size:.93rem}
+  .doc blockquote p{margin:4px 0}
+  .doc code{background:#eef2ff;color:var(--indigo-dark);padding:2px 6px;border-radius:5px;font-size:.88em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .doc pre{background:#111827;color:#e5e7eb;padding:18px 20px;border-radius:var(--radius);overflow:auto;margin:18px 0;font-size:.86rem;line-height:1.5}
+  .doc pre code{background:none;color:inherit;padding:0}
+  footer{max-width:860px;margin:24px auto 0;padding:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .draft{background:#fef3c7;color:#92400e;font-size:.72rem;font-weight:600;padding:4px 11px;border-radius:999px}
+  @media(max-width:680px){.hero h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+  <div class="topbar"><div class="row">
+    <a class="back" href="index.html">&larr; Spec Pack</a>
+    <span class="brand"><span class="logo">S</span> SpaceLink</span>
+  </div></div>
+  <header class="hero"><div class="row">
+    <span class="eyebrow">SpaceLink · Working Spec</span>
+    <h1>Listing Field Specification</h1>
+    <p class="sub">The corrected, orthogonal taxonomy for the provider 'List your space' form, plus the recommended pricing model.</p>
+  </div></header>
+  <main>
+    <div class="doc">
+<h1>SpaceLink — Listing Form Field Specification</h1>
+<p>A reference for the provider "List your space" form. The goal is that every field
+answers a <strong>different</strong> question, with no overlapping options between fields.</p>
+<hr />
+<h2>Part 1 — Categorisation fields</h2>
+<p>Each field is independent (orthogonal). A provider can pick from every field without
+ever ticking the same concept twice.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Question it answers</th>
+<th>Input type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Storage type</td>
+<td>What kind of facility/operation is this?</td>
+<td>multi-select</td>
+</tr>
+<tr>
+<td>Storage environment</td>
+<td>What conditions does the space hold?</td>
+<td>multi-select</td>
+</tr>
+<tr>
+<td>Goods type</td>
+<td>What products can be stored here?</td>
+<td>multi-select</td>
+</tr>
+<tr>
+<td>Storage format</td>
+<td>How is it physically stored / racked?</td>
+<td>multi-select</td>
+</tr>
+<tr>
+<td>Services offered</td>
+<td>What value-added services are available?</td>
+<td>multi-select</td>
+</tr>
+</tbody>
+</table>
+<h3>1. Storage type (facility / operation)</h3>
+<ul>
+<li>General warehouse</li>
+<li>Distribution centre</li>
+<li>Fulfilment centre</li>
+<li>Cross-dock / transload facility</li>
+<li>Bonded / customs-controlled warehouse</li>
+<li>Container &amp; yard storage</li>
+<li>Outdoor / open-air storage</li>
+<li>Self-storage / small units</li>
+</ul>
+<blockquote>
+<p>Removed from the old list: <em>Cold storage</em> and <em>Dry storage</em> (these are <strong>environment</strong>),
+<em>Dangerous goods</em> (this is <strong>goods type</strong>), <em>Freight</em> (this is a <strong>service</strong>).</p>
+</blockquote>
+<h3>2. Storage environment (climate maintained)</h3>
+<ul>
+<li>Ambient / dry (unconditioned)</li>
+<li>Climate-controlled (temperature + humidity)</li>
+<li>Chilled / refrigerated (2–8°C)</li>
+<li>Frozen (-18°C to -25°C)</li>
+<li>Humidity-controlled</li>
+</ul>
+<blockquote>
+<p>Collapsed duplicates: "Cold storage" = Chilled/refrigerated; "Climate-controlled"
+already covers the old "Temperature-controlled".</p>
+</blockquote>
+<h3>3. Goods type (what can be stored)</h3>
+<ul>
+<li>General / dry goods</li>
+<li>Food &amp; beverage</li>
+<li>Perishables (fresh produce, dairy)</li>
+<li>Pharmaceuticals &amp; healthcare</li>
+<li>Dangerous / hazardous goods</li>
+<li>Chemicals</li>
+<li>Electronics &amp; high-value</li>
+<li>Automotive parts</li>
+<li>Textiles &amp; apparel</li>
+<li>Building materials</li>
+<li>Consumer goods / FMCG</li>
+<li>Bulk commodities / raw materials</li>
+<li>Fragile goods</li>
+<li>Oversized / heavy machinery</li>
+</ul>
+<blockquote>
+<p>Removed: <em>Dry storage</em> (environment), <em>E-commerce (Pick/Pack)</em> and <em>Third-party Logistics</em>
+(these are <strong>services</strong>).</p>
+</blockquote>
+<h3>4. Storage format (physical configuration)</h3>
+<ul>
+<li>Pallet racking (selective)</li>
+<li>Drive-in / drive-through racking</li>
+<li>Push-back / pallet-flow racking</li>
+<li>Cantilever racking</li>
+<li>Floor / block stacked</li>
+<li>Bulk floor storage</li>
+<li>Shelving / small-parts bins</li>
+<li>Mezzanine</li>
+<li>Mobile racking</li>
+<li>Automated (AS/RS)</li>
+</ul>
+<blockquote>
+<p>Removed: <em>Dry storage</em> (environment). Rest was already clean.</p>
+</blockquote>
+<h3>5. Services offered (NEW — value-added)</h3>
+<p>Catches the items that were wrongly sitting under goods/type.
+- Pick &amp; pack / e-commerce fulfilment
+- Third-party logistics (3PL)
+- Cross-docking / transloading
+- Kitting &amp; assembly
+- Labelling &amp; repackaging
+- Returns / reverse logistics
+- Freight forwarding / transport
+- Inventory management</p>
+<hr />
+<h2>Part 2 — Pricing model</h2>
+<h3>Problem with the current form</h3>
+<p>"Pricing Types" offers four mutually exclusive options (Flexible, Per pallet, Per SQM,
+Fixed Monthly) but the form only collects a single "Monthly Rate" field that doesn't change
+based on the selection, and never shows a calculated total. A "$10.50" entry against
+"Per SQM" is ambiguous — is that the per-m² rate or the whole monthly price? There's no
+breakdown for either side.</p>
+<h3>Recommended structure</h3>
+<p>The pricing model selection should <strong>drive which inputs appear</strong> and show a <strong>live total</strong>.</p>
+<p><strong>Pricing models</strong> (rename "Flexible" → "Custom / quote" for clarity):</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Inputs shown</th>
+<th>Monthly total formula</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Per m²</td>
+<td>rate ($/m²/mo)</td>
+<td><code>rate × total area (m²)</code></td>
+</tr>
+<tr>
+<td>Per pallet</td>
+<td>rate ($/pallet), billing cycle (week/month), pallet positions</td>
+<td><code>rate × positions</code> (× 4.333 if weekly)</td>
+</tr>
+<tr>
+<td>Fixed monthly</td>
+<td>flat amount ($/mo)</td>
+<td>the amount</td>
+</tr>
+<tr>
+<td>Custom / quote</td>
+<td>(optional) indicative min–max</td>
+<td>none — shown as "Price on enquiry"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Billing cycle toggle</strong> (Weekly / Monthly): NZ warehousing often quotes per pallet
+<strong>per week</strong>, so support both and normalise to a monthly figure for display.
+Weekly → monthly factor = 52 ÷ 12 = <strong>4.333</strong>.</p>
+<p><strong>Optional add-ons</strong> (flat $/month each — gives flexibility, ties to the amenities):
+- Climate control surcharge
+- 24/7 access
+- WMS / inventory management
+- Dock / loading handling</p>
+<p><strong>Optional minimum commitment</strong>: minimum term (months) and/or minimum monthly spend.</p>
+<h3>Live summary (clarity for both sides)</h3>
+<pre><code>Base                $8,400.00 / mo   ($10.50/m² × 800 m²)
++ Climate control     $400.00 / mo
+─────────────────────────────────
+Customer pays       $8,800.00 / mo
+− SpaceLink fee 8%    −$704.00 / mo
+─────────────────────────────────
+You receive         $8,096.00 / mo
+</code></pre>
+<p>A plain-language line reinforces it, e.g.:
+<em>"Customers see this space at $8,800/mo. After SpaceLink's 8% fee you receive $8,096/mo."</em></p>
+<blockquote>
+<p>Fee % shown here is a placeholder — wire it to your actual commission config
+(the 15–18% blended rate, or the 6-month promotional rate during launch).</p>
+</blockquote>
+<p>A working prototype of this module is provided alongside this doc
+(<code>spacelink_pricing_module.html</code>).</p>
+    </div>
+    <footer>
+      <span>SpaceLink · prepared for the design &amp; build team (Codeaza)</span>
+      <span class="draft">DRAFT — for discussion</span>
+    </footer>
+  </main>
+</body>
+</html>

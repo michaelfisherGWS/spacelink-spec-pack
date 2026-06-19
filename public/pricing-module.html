@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpaceLink — Pricing</title>
+<style>
+  :root{
+    --bg:#f8fafc; --card:#ffffff; --ink:#1f2937; --muted:#6b7280;
+    --line:#e5e7eb; --accent:#4f46e5; --accent2:#7c3aed;
+    --accent-soft:#eef2ff; --good:#059669; --radius:12px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:560px; margin:0 auto; padding:20px 16px 48px}
+  h2{font-size:1.05rem; font-weight:700; margin:28px 0 12px}
+  h2:first-of-type{margin-top:8px}
+  .sub{color:var(--muted); font-size:.82rem; margin:-6px 0 14px}
+
+  /* model selector */
+  .models{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .model{
+    border:1.5px solid var(--line); border-radius:var(--radius);
+    background:var(--card); padding:14px 12px; cursor:pointer;
+    transition:.15s border-color,.15s background; user-select:none;
+  }
+  .model:hover{border-color:#c7cad6}
+  .model.active{border-color:var(--accent); background:var(--accent-soft)}
+  .model .t{font-weight:600; font-size:.92rem}
+  .model .d{font-size:.74rem; color:var(--muted); margin-top:2px}
+
+  /* fields */
+  .card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:var(--radius); padding:16px; margin-top:14px;
+  }
+  label.fld{display:block; font-size:.8rem; font-weight:600; color:#374151; margin-bottom:6px}
+  .row{display:flex; gap:12px; flex-wrap:wrap}
+  .row > div{flex:1; min-width:130px}
+  input[type=number]{
+    width:100%; padding:11px 12px; border:1px solid var(--line);
+    border-radius:10px; font-size:1rem; font-family:inherit; color:var(--ink);
+    background:#fff;
+  }
+  input[type=number]:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+  .inputwrap{position:relative}
+  .inputwrap .pre{position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:.95rem}
+  .inputwrap.has-pre input{padding-left:26px}
+  .hint{font-size:.72rem; color:var(--muted); margin-top:5px}
+
+  /* segmented toggle */
+  .seg{display:inline-flex; background:#f1f1f4; border-radius:10px; padding:3px}
+  .seg button{
+    border:0; background:transparent; padding:7px 16px; border-radius:8px;
+    font:inherit; font-size:.85rem; color:var(--muted); cursor:pointer;
+  }
+  .seg button.on{background:#fff; color:var(--ink); font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  /* add-ons */
+  .addon{display:flex; align-items:center; gap:12px; padding:11px 0; border-top:1px solid var(--line)}
+  .addon:first-child{border-top:0}
+  .addon .meta{flex:1}
+  .addon .meta .n{font-size:.9rem; font-weight:500}
+  .addon .meta .x{font-size:.72rem; color:var(--muted)}
+  .addon .amt{width:108px}
+  .addon .amt input{padding:8px 10px 8px 22px; font-size:.92rem}
+  .addon.off .amt{opacity:.4; pointer-events:none}
+  /* switch */
+  .sw{position:relative; width:42px; height:25px; flex:none}
+  .sw input{opacity:0; width:0; height:0}
+  .sw .track{position:absolute; inset:0; background:#d1d5db; border-radius:99px; transition:.2s}
+  .sw .track:before{content:""; position:absolute; height:19px; width:19px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s}
+  .sw input:checked + .track{background:var(--accent)}
+  .sw input:checked + .track:before{transform:translateX(17px)}
+
+  /* summary */
+  .summary{
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff; border-radius:16px; padding:18px 18px 16px; margin-top:20px;
+    box-shadow:0 10px 30px -10px rgba(79,70,229,.5);
+  }
+  .summary .lbl{font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; opacity:.85}
+  .sline{display:flex; justify-content:space-between; align-items:baseline; font-size:.9rem; padding:5px 0; opacity:.95}
+  .sline.muted{opacity:.78; font-size:.83rem}
+  .sline .v{font-variant-numeric:tabular-nums}
+  .sdiv{height:1px; background:rgba(255,255,255,.25); margin:8px 0}
+  .net{display:flex; justify-content:space-between; align-items:baseline; margin-top:4px}
+  .net .big{font-size:1.7rem; font-weight:700; font-variant-numeric:tabular-nums}
+  .plain{font-size:.82rem; opacity:.9; margin-top:12px; line-height:1.5}
+  .quote{font-size:1.2rem; font-weight:700; margin-top:2px}
+  .feewrap{display:flex; align-items:center; gap:6px}
+  .feewrap input{width:46px; padding:2px 5px; border-radius:6px; border:0; font-size:.82rem; text-align:center; font-family:inherit}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<a href="index.html" style="position:fixed;top:14px;left:14px;z-index:9999;display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:7px 14px;font-family:Inter,-apple-system,sans-serif;font-weight:600;font-size:13px;color:#4f46e5;text-decoration:none;box-shadow:0 2px 8px rgba(16,24,40,.12)">&larr; Spec Pack</a>
+<div class="wrap">
+
+  <h2>Pricing model</h2>
+  <p class="sub">Pick how you charge — the form adapts to match.</p>
+  <div class="models" id="models">
+    <div class="model active" data-model="sqm">
+      <div class="t">Per m²</div><div class="d">Rate × floor area</div>
+    </div>
+    <div class="model" data-model="pallet">
+      <div class="t">Per pallet</div><div class="d">Rate × pallet positions</div>
+    </div>
+    <div class="model" data-model="fixed">
+      <div class="t">Fixed monthly</div><div class="d">One flat price</div>
+    </div>
+    <div class="model" data-model="custom">
+      <div class="t">Custom / quote</div><div class="d">Price on enquiry</div>
+    </div>
+  </div>
+
+  <!-- PER M² -->
+  <div class="card panel" data-panel="sqm">
+    <div class="row">
+      <div>
+        <label class="fld">Rate (NZD / m² / month)</label>
+        <div class="inputwrap has-pre"><span class="pre">$</span>
+          <input type="number" id="sqmRate" value="10.50" min="0" step="0.5">
+        </div>
+      </div>
+      <div>
+        <label class="fld">Total area (m²)</label>
+        <input type="number" id="sqmArea" value="800" min="0" step="10">
+        <div class="hint">Pulled from your Space Specification.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PER PALLET -->
+  <div class="card panel hidden" data-panel="pallet">
+    <div style="margin-bottom:14px">
+      <label class="fld">Billing cycle</label>
+      <div class="seg" id="cycle">
+        <button data-cycle="week" class="on">Per week</button>
+        <button data-cycle="month">Per month</button>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label class="fld" id="palletRateLbl">Rate (NZD / pallet / week)</label>
+        <div class="inputwrap has-pre"><span class="pre">$</span>
+          <input type="number" id="palletRate" value="4.50" min="0" step="0.25">
+        </div>
+      </div>
+      <div>
+        <label class="fld">Pallet positions</label>
+        <input type="number" id="palletQty" value="600" min="0" step="10">
+      </div>
+    </div>
+  </div>
+
+  <!-- FIXED -->
+  <div class="card panel hidden" data-panel="fixed">
+    <label class="fld">Flat rate (NZD / month)</label>
+    <div class="inputwrap has-pre"><span class="pre">$</span>
+      <input type="number" id="fixedAmt" value="8000" min="0" step="50">
+    </div>
+  </div>
+
+  <!-- CUSTOM -->
+  <div class="card panel hidden" data-panel="custom">
+    <label class="fld">Indicative range (optional)</label>
+    <div class="row">
+      <div class="inputwrap has-pre"><span class="pre">$</span>
+        <input type="number" id="custMin" placeholder="from" min="0" step="50">
+      </div>
+      <div class="inputwrap has-pre"><span class="pre">$</span>
+        <input type="number" id="custMax" placeholder="to" min="0" step="50">
+      </div>
+    </div>
+    <div class="hint">Leave blank to show "Price on enquiry". Customers send a quote request.</div>
+  </div>
+
+  <!-- ADD-ONS -->
+  <h2>Optional add-ons</h2>
+  <p class="sub">Charge extra for premium features. Toggle on and set a monthly price.</p>
+  <div class="card" id="addons">
+    <div class="addon off" data-key="climate">
+      <label class="sw"><input type="checkbox"><span class="track"></span></label>
+      <div class="meta"><div class="n">Climate controlled</div><div class="x">Temp + humidity managed space</div></div>
+      <div class="amt inputwrap has-pre"><span class="pre">$</span><input type="number" value="400" min="0" step="25"></div>
+    </div>
+    <div class="addon off" data-key="access">
+      <label class="sw"><input type="checkbox"><span class="track"></span></label>
+      <div class="meta"><div class="n">24/7 access</div><div class="x">Out-of-hours entry</div></div>
+      <div class="amt inputwrap has-pre"><span class="pre">$</span><input type="number" value="150" min="0" step="25"></div>
+    </div>
+    <div class="addon off" data-key="wms">
+      <label class="sw"><input type="checkbox"><span class="track"></span></label>
+      <div class="meta"><div class="n">WMS / inventory mgmt</div><div class="x">System-tracked stock</div></div>
+      <div class="amt inputwrap has-pre"><span class="pre">$</span><input type="number" value="250" min="0" step="25"></div>
+    </div>
+    <div class="addon off" data-key="dock">
+      <label class="sw"><input type="checkbox"><span class="track"></span></label>
+      <div class="meta"><div class="n">Dock / loading handling</div><div class="x">Staffed load/unload</div></div>
+      <div class="amt inputwrap has-pre"><span class="pre">$</span><input type="number" value="200" min="0" step="25"></div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary" id="summary">
+    <div class="lbl">Monthly estimate</div>
+    <div id="sBreakdown"></div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const f = n => "$" + n.toLocaleString("en-NZ",{minimumFractionDigits:2,maximumFractionDigits:2});
+  const WEEK_TO_MONTH = 52/12;
+  let model = "sqm";
+  let cycle = "week";
+  let feePct = 8;
+
+  const $ = s => document.querySelector(s);
+  const $$ = s => document.querySelectorAll(s);
+
+  function showPanel(){
+    $$(".panel").forEach(p => p.classList.toggle("hidden", p.dataset.panel !== model));
+    $$(".model").forEach(m => m.classList.toggle("active", m.dataset.model === model));
+  }
+
+  function base(){
+    if(model==="sqm")    return (+$("#sqmRate").value||0) * (+$("#sqmArea").value||0);
+    if(model==="fixed")  return (+$("#fixedAmt").value||0);
+    if(model==="pallet"){
+      const v = (+$("#palletRate").value||0) * (+$("#palletQty").value||0);
+      return cycle==="week" ? v*WEEK_TO_MONTH : v;
+    }
+    return null; // custom
+  }
+
+  function addonsTotal(){
+    let sum=0;
+    $$("#addons .addon").forEach(a=>{
+      if(a.querySelector("input[type=checkbox]").checked)
+        sum += (+a.querySelector(".amt input").value||0);
+    });
+    return sum;
+  }
+
+  function baseLabel(){
+    if(model==="sqm")   return `${f(+$("#sqmRate").value||0)}/m² × ${(+$("#sqmArea").value||0)} m²`;
+    if(model==="pallet"){
+      const r=+$("#palletRate").value||0, q=+$("#palletQty").value||0;
+      return cycle==="week" ? `${f(r)}/pallet/wk × ${q} (≈ monthly)` : `${f(r)}/pallet/mo × ${q}`;
+    }
+    if(model==="fixed") return "Flat monthly rate";
+    return "";
+  }
+
+  function render(){
+    const box = $("#sBreakdown");
+
+    if(model==="custom"){
+      const lo=+$("#custMin").value||0, hi=+$("#custMax").value||0;
+      let txt = "Price on enquiry";
+      if(lo&&hi) txt = `${f(lo)} – ${f(hi)} / mo`;
+      else if(lo) txt = `From ${f(lo)} / mo`;
+      else if(hi) txt = `Up to ${f(hi)} / mo`;
+      box.innerHTML =
+        `<div class="quote">${txt}</div>
+         <div class="plain">Customers can't book instantly — they'll send a quote request and you reply with a tailored price.</div>`;
+      return;
+    }
+
+    const b = base(), add = addonsTotal(), subtotal = b + add;
+    const fee = subtotal * (feePct/100), net = subtotal - fee;
+
+    let rows = `<div class="sline"><span>Base <span style="opacity:.7">(${baseLabel()})</span></span><span class="v">${f(b)}</span></div>`;
+    if(add>0) rows += `<div class="sline"><span>Add-ons</span><span class="v">${f(add)}</span></div>`;
+    rows += `<div class="sdiv"></div>
+      <div class="sline"><span>Customer pays / mo</span><span class="v">${f(subtotal)}</span></div>
+      <div class="sline muted"><span class="feewrap">− SpaceLink fee
+        <input type="number" id="feeInput" value="${feePct}" min="0" max="100" step="0.5">%</span>
+        <span class="v">−${f(fee)}</span></div>
+      <div class="sdiv"></div>
+      <div class="net"><span class="lbl" style="align-self:center">You receive / mo</span><span class="big">${f(net)}</span></div>`;
+
+    let weekly = "";
+    if(model==="pallet" && cycle==="week"){
+      const wk = (+$("#palletRate").value||0)*(+$("#palletQty").value||0);
+      weekly = ` That's ${f(wk)}/week before add-ons.`;
+    }
+    rows += `<div class="plain">Customers see this space at <b>${f(subtotal)}/mo</b>. After the ${feePct}% platform fee you receive <b>${f(net)}/mo</b>.${weekly}</div>`;
+
+    box.innerHTML = rows;
+    $("#feeInput").addEventListener("input", e=>{ feePct = +e.target.value||0; render(); });
+  }
+
+  // events
+  $$(".model").forEach(m => m.addEventListener("click", ()=>{ model=m.dataset.model; showPanel(); render(); }));
+  $$("#cycle button").forEach(b => b.addEventListener("click", ()=>{
+    cycle=b.dataset.cycle;
+    $$("#cycle button").forEach(x=>x.classList.toggle("on", x===b));
+    $("#palletRateLbl").textContent = `Rate (NZD / pallet / ${cycle})`;
+    render();
+  }));
+  $$("#addons .addon").forEach(a=>{
+    const cb=a.querySelector("input[type=checkbox]");
+    cb.addEventListener("change", ()=>{ a.classList.toggle("off", !cb.checked); render(); });
+    a.querySelector(".amt input").addEventListener("input", render);
+  });
+  document.addEventListener("input", e=>{ if(e.target.matches('.panel input')) render(); });
+
+  showPanel(); render();
+})();
+</script>
+</body>
+</html>
