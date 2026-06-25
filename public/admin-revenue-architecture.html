@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SpaceLink · Admin Revenue Architecture</title>
+<title>SpaceLinq · Admin Revenue Architecture</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -58,17 +58,17 @@
 <body>
   <div class="topbar"><div class="row">
     <a class="back" href="index.html">&larr; Spec Pack</a>
-    <span class="brand"><span class="logo">S</span> SpaceLink</span>
+    <span class="brand"><span class="logo">S</span> SpaceLinq</span>
   </div></div>
   <header class="hero"><div class="row">
-    <span class="eyebrow">SpaceLink · Working Spec</span>
+    <span class="eyebrow">SpaceLinq · Working Spec</span>
     <h1>Admin Revenue Architecture</h1>
-    <p class="sub">How SpaceLink captures value across five revenue layers, and the phased sequence to switch them on without choking growth.</p>
+    <p class="sub">How SpaceLinq captures value across five revenue layers, and the phased sequence to switch them on without choking growth.</p>
   </div></header>
   <main>
     <div class="doc">
-<h1>SpaceLink: Admin-Side Revenue Architecture &amp; Phased Rollout</h1>
-<p><em>How SpaceLink (the platform) captures value, what to set up for each stream, and the sequence to switch them on without choking growth.</em></p>
+<h1>SpaceLinq: Admin-Side Revenue Architecture &amp; Phased Rollout</h1>
+<p><em>How SpaceLinq (the platform) captures value, what to set up for each stream, and the sequence to switch them on without choking growth.</em></p>
 <hr />
 <h2>The governing principle: monetise liquidity, not the calendar</h2>
 <p>A two-sided marketplace lives or dies on liquidity — enough providers that seekers find what they want, and enough seekers that providers stay listed. Every revenue stream below is sequenced against <strong>liquidity milestones</strong>, not just "month 6." The 6-month free window is your <em>promise</em>; the milestones are your <em>trigger</em>.</p>
@@ -122,10 +122,10 @@
 </table>
 <hr />
 <h2>The admin revenue stack — five layers you control</h2>
-<p>Think of SpaceLink's income as five stacked layers. Each sits on top of the one below and only switches on once the layer beneath is stable.</p>
+<p>Think of SpaceLinq's income as five stacked layers. Each sits on top of the one below and only switches on once the layer beneath is stable.</p>
 <h3>Layer 1 — Transaction take rate (the engine)</h3>
 <p>The core. A split commission off every confirmed booking: a small provider share (3–5%) and a seeker booking fee (tiered, as above), collected automatically when you sit in the money flow.</p>
-<p><strong>How you set it up:</strong> You must hold funds in escrow to capture this cleanly — seeker pays SpaceLink, SpaceLink releases to provider minus commission. In NZ that means a payment provider supporting marketplace/split payments and held balances (Stripe Connect is the common path; Windcave is the local option to price against). Your admin panel needs: a commission-rate table editable per tier, a promotional-override flag (set to 0% during the free window), a founding-member flag (locks a permanent discount), and an escrow/payout ledger.</p>
+<p><strong>How you set it up:</strong> You must hold funds in escrow to capture this cleanly — seeker pays SpaceLinq, SpaceLinq releases to provider minus commission. In NZ that means a payment provider supporting marketplace/split payments and held balances (Stripe Connect is the common path; Windcave is the local option to price against). Your admin panel needs: a commission-rate table editable per tier, a promotional-override flag (set to 0% during the free window), a founding-member flag (locks a permanent discount), and an escrow/payout ledger.</p>
 <p><strong>Admin levers:</strong> tier thresholds, provider vs seeker split, promo overrides, founding-member rates, payout timing (holding funds longer improves your working capital and float).</p>
 <h3>Layer 2 — Provider visibility &amp; subscriptions</h3>
 <p>Once providers compete for seeker attention, visibility becomes sellable: featured listings, top-of-search placement, and provider subscription tiers (more listings, analytics, priority support). This is the first revenue you can charge <em>during</em> the free transaction window, because it's a provider choosing to pay for an edge — not a tax on the core service.</p>
@@ -152,13 +152,13 @@
 <p>You <em>can</em> quietly test Layer 2 (a paid featured listing) late in this phase with a handful of keen providers — optional, low-stakes, and it tells you willingness-to-pay before you commit.</p>
 <h3>Phase 1 — Activation (Months 6–12): turn on the engine, gently</h3>
 <p><strong>Milestone to enter:</strong> liquidity proven in your first region. <strong>Milestone to exit:</strong> transaction fees accepted with &lt;15% churn, and a second region (Wellington/Christchurch) reaching liquidity.</p>
-<p>Switch on <strong>Layer 1</strong> for new users first, grandfathering existing free users for an extra 3–6 months at a discount. Give 60–90 days' notice with a value report ("SpaceLink connected you to X bookings worth $Y"). Roll out <strong>Layer 2</strong> properly — featured listings and provider subscriptions become a standing product. Introduce <strong>Layer 3</strong> insurance as an opt-in add-on with the free baseline tier live.</p>
+<p>Switch on <strong>Layer 1</strong> for new users first, grandfathering existing free users for an extra 3–6 months at a discount. Give 60–90 days' notice with a value report ("SpaceLinq connected you to X bookings worth $Y"). Roll out <strong>Layer 2</strong> properly — featured listings and provider subscriptions become a standing product. Introduce <strong>Layer 3</strong> insurance as an opt-in add-on with the free baseline tier live.</p>
 <p>Watch churn obsessively in this phase. &gt;15% immediate churn on the fee announcement means the rate is too high — adjust tiers rather than abandon the model.</p>
 <h3>Phase 2 — Expansion (Months 12–24): layer the margins</h3>
 <p><strong>Milestone to enter:</strong> transaction revenue stable and growing across two+ regions.</p>
 <p>Scale <strong>Layer 3</strong> (security packages, value-added services attach at checkout). Stand up <strong>Layer 4</strong> — sponsored search and banners — now that traffic justifies advertiser spend. Begin the Australia groundwork using the proven NZ commission structure. This is where the blended revenue picture (commission + subscriptions + ads + add-ons) starts to compound.</p>
 <h3>Phase 3 — Platform (Months 24+): optionality and moat</h3>
-<p><strong>Milestone to enter:</strong> SpaceLink is the default warehouse marketplace in NZ with Australia live.</p>
+<p><strong>Milestone to enter:</strong> SpaceLinq is the default warehouse marketplace in NZ with Australia live.</p>
 <p>Switch on <strong>Layer 5</strong> streams facility-by-facility as providers gain capability (energy, digital custody, circular economy). Launch data insight products off the Layer 4 base. These don't carry the rollout — they widen the moat and create the "innovation hub" story for investors and acquirers.</p>
 <hr />
 <h2>What this builds toward</h2>
@@ -198,7 +198,7 @@
 <p><em>Next practical step: confirm your payment/escrow provider (Stripe Connect vs Windcave for NZ), since Layer 1's entire setup hangs off being able to hold and split funds. Everything else can be built around that decision.</em></p>
     </div>
     <footer>
-      <span>SpaceLink · prepared for the design &amp; build team (Codeaza)</span>
+      <span>SpaceLinq · prepared for the design &amp; build team (Codeaza)</span>
       <span class="draft">DRAFT — for discussion</span>
     </footer>
   </main>

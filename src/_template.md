@@ -7,7 +7,7 @@
 ## A section heading
 
 Write normally. **Bold** for emphasis, *italics* for asides. Bullet lists, numbered lists,
-tables, quotes and code blocks all convert into the SpaceLink house style automatically.
+tables, quotes and code blocks all convert into the SpaceLinq house style automatically.
 
 - A bullet point
 - Another point
@@ -25,7 +25,7 @@ tables, quotes and code blocks all convert into the SpaceLink house style automa
 
 ```
 Base                $8,400.00 / mo
-- SpaceLink fee 8%   -$672.00 / mo
+- SpaceLinq fee 8%   -$672.00 / mo
 You receive         $7,728.00 / mo
 ```
 

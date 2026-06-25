@@ -1,4 +1,4 @@
-# SpaceLink — Listing Form Field Specification
+# SpaceLinq — Listing Form Field Specification
 
 A reference for the provider "List your space" form. The goal is that every field
 answers a **different** question, with no overlapping options between fields.
@@ -126,13 +126,13 @@ Base                $8,400.00 / mo   ($10.50/m² × 800 m²)
 + Climate control     $400.00 / mo
 ─────────────────────────────────
 Customer pays       $8,800.00 / mo
-− SpaceLink fee 8%    −$704.00 / mo
+− SpaceLinq fee 8%    −$704.00 / mo
 ─────────────────────────────────
 You receive         $8,096.00 / mo
 ```
 
 A plain-language line reinforces it, e.g.:
-*"Customers see this space at $8,800/mo. After SpaceLink's 8% fee you receive $8,096/mo."*
+*"Customers see this space at $8,800/mo. After SpaceLinq's 8% fee you receive $8,096/mo."*
 
 > Fee % shown here is a placeholder — wire it to your actual commission config
 > (the 15–18% blended rate, or the 6-month promotional rate during launch).

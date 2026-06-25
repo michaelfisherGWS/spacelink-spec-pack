@@ -1,6 +1,6 @@
-# SpaceLink: Admin-Side Revenue Architecture & Phased Rollout
+# SpaceLinq: Admin-Side Revenue Architecture & Phased Rollout
 
-*How SpaceLink (the platform) captures value, what to set up for each stream, and the sequence to switch them on without choking growth.*
+*How SpaceLinq (the platform) captures value, what to set up for each stream, and the sequence to switch them on without choking growth.*
 
 ---
 
@@ -38,13 +38,13 @@ The corrected take-rate ceiling by deal size:
 
 ## The admin revenue stack — five layers you control
 
-Think of SpaceLink's income as five stacked layers. Each sits on top of the one below and only switches on once the layer beneath is stable.
+Think of SpaceLinq's income as five stacked layers. Each sits on top of the one below and only switches on once the layer beneath is stable.
 
 ### Layer 1 — Transaction take rate (the engine)
 
 The core. A split commission off every confirmed booking: a small provider share (3–5%) and a seeker booking fee (tiered, as above), collected automatically when you sit in the money flow.
 
-**How you set it up:** You must hold funds in escrow to capture this cleanly — seeker pays SpaceLink, SpaceLink releases to provider minus commission. In NZ that means a payment provider supporting marketplace/split payments and held balances (Stripe Connect is the common path; Windcave is the local option to price against). Your admin panel needs: a commission-rate table editable per tier, a promotional-override flag (set to 0% during the free window), a founding-member flag (locks a permanent discount), and an escrow/payout ledger.
+**How you set it up:** You must hold funds in escrow to capture this cleanly — seeker pays SpaceLinq, SpaceLinq releases to provider minus commission. In NZ that means a payment provider supporting marketplace/split payments and held balances (Stripe Connect is the common path; Windcave is the local option to price against). Your admin panel needs: a commission-rate table editable per tier, a promotional-override flag (set to 0% during the free window), a founding-member flag (locks a permanent discount), and an escrow/payout ledger.
 
 **Admin levers:** tier thresholds, provider vs seeker split, promo overrides, founding-member rates, payout timing (holding funds longer improves your working capital and float).
 
@@ -98,7 +98,7 @@ You *can* quietly test Layer 2 (a paid featured listing) late in this phase with
 
 **Milestone to enter:** liquidity proven in your first region. **Milestone to exit:** transaction fees accepted with <15% churn, and a second region (Wellington/Christchurch) reaching liquidity.
 
-Switch on **Layer 1** for new users first, grandfathering existing free users for an extra 3–6 months at a discount. Give 60–90 days' notice with a value report ("SpaceLink connected you to X bookings worth $Y"). Roll out **Layer 2** properly — featured listings and provider subscriptions become a standing product. Introduce **Layer 3** insurance as an opt-in add-on with the free baseline tier live.
+Switch on **Layer 1** for new users first, grandfathering existing free users for an extra 3–6 months at a discount. Give 60–90 days' notice with a value report ("SpaceLinq connected you to X bookings worth $Y"). Roll out **Layer 2** properly — featured listings and provider subscriptions become a standing product. Introduce **Layer 3** insurance as an opt-in add-on with the free baseline tier live.
 
 Watch churn obsessively in this phase. >15% immediate churn on the fee announcement means the rate is too high — adjust tiers rather than abandon the model.
 
@@ -110,7 +110,7 @@ Scale **Layer 3** (security packages, value-added services attach at checkout). 
 
 ### Phase 3 — Platform (Months 24+): optionality and moat
 
-**Milestone to enter:** SpaceLink is the default warehouse marketplace in NZ with Australia live.
+**Milestone to enter:** SpaceLinq is the default warehouse marketplace in NZ with Australia live.
 
 Switch on **Layer 5** streams facility-by-facility as providers gain capability (energy, digital custody, circular economy). Launch data insight products off the Layer 4 base. These don't carry the rollout — they widen the moat and create the "innovation hub" story for investors and acquirers.
 

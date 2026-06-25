@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-SpaceLink Spec Pack builder.
+SpaceLinq Spec Pack builder.
 Converts a Markdown doc into a branded, self-contained HTML page that matches
-SpaceLink's design tokens and links back to the Spec Pack hub (index.html).
+SpaceLinq's design tokens and links back to the Spec Pack hub (index.html).
 
 Usage:
     python3 build_pack.py <input.md> <output.html> "Page Title" "Short subtitle"
@@ -20,7 +20,7 @@ TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SpaceLink · {title}</title>
+<title>SpaceLinq · {title}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -75,10 +75,10 @@ TEMPLATE = """<!DOCTYPE html>
 <body>
   <div class="topbar"><div class="row">
     <a class="back" href="index.html">&larr; Spec Pack</a>
-    <span class="brand"><span class="logo">S</span> SpaceLink</span>
+    <span class="brand"><span class="logo">S</span> SpaceLinq</span>
   </div></div>
   <header class="hero"><div class="row">
-    <span class="eyebrow">SpaceLink · Working Spec</span>
+    <span class="eyebrow">SpaceLinq · Working Spec</span>
     <h1>{title}</h1>
     {subtitle_html}
   </div></header>
@@ -87,7 +87,7 @@ TEMPLATE = """<!DOCTYPE html>
 {body}
     </div>
     <footer>
-      <span>SpaceLink · prepared for the design &amp; build team (Codeaza)</span>
+      <span>SpaceLinq · prepared for the design &amp; build team (Codeaza)</span>
       <span class="draft">DRAFT — for discussion</span>
     </footer>
   </main>

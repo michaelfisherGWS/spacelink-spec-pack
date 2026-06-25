@@ -1,4 +1,4 @@
-# SpaceLink Spec Pack — How to publish & keep it updated
+# SpaceLinq Spec Pack — How to publish & keep it updated
 
 A plain-English guide for sending your designs and specs to the build team as **one link**.
 *(This file is just for you — you don't need to send it to anyone.)*

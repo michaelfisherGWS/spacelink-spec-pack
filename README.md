@@ -1,6 +1,6 @@
-# SpaceLink Spec Pack
+# SpaceLinq Spec Pack
 
-Working specs and interactive prototypes for **SpaceLink** (NZ 3PL storage marketplace),
+Working specs and interactive prototypes for **SpaceLinq** (NZ 3PL storage marketplace),
 prepared for the Codeaza build team.
 
 ## Live site
