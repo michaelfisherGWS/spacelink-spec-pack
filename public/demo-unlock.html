@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpaceLink · Demo — Unlock Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--indigo:#4f46e5;--purple:#7c3aed;--indigo-dark:#3730a3;--grad:linear-gradient(135deg,#4f46e5,#7c3aed);
+    --bg:#f8fafc;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--card:#fff;--radius:12px;--shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);--good:#059669;--amber:#b45309}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(248,250,252,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .row{max-width:880px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+  .back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--indigo);font-weight:600;font-size:.9rem}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.95rem}
+  .logo{width:26px;height:26px;border-radius:7px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:800;font-size:.85rem}
+  .hero{background:var(--grad);color:#fff;padding:40px 0 46px}
+  .eyebrow{display:inline-block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;background:rgba(255,255,255,.18);padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  .hero h1{font-size:1.9rem;font-weight:800;letter-spacing:-.02em}
+  .hero p{margin-top:10px;max-width:64ch;color:rgba(255,255,255,.92)}
+  section{padding:34px 0}
+  .demoControls{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+  .demoControls .lbl{font-weight:700;font-size:.95rem}
+  .switch{position:relative;display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+  .track{width:52px;height:30px;border-radius:999px;background:#cbd5e1;position:relative;transition:.2s}
+  .track:after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+  input:checked + .track{background:var(--good)}
+  input:checked + .track:after{left:25px}
+  .switch input{position:absolute;opacity:0;width:0;height:0}
+  .statePill{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+  .locked .statePill{background:#fef3c7;color:var(--amber)}
+  .listing{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  .photo{height:170px;background:linear-gradient(135deg,#c7d2fe,#e9d5ff);display:flex;align-items:flex-end;padding:14px;gap:8px}
+  .tag{background:rgba(255,255,255,.9);color:var(--indigo-dark);font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px}
+  .body{padding:22px 24px}
+  .title{font-size:1.25rem;font-weight:800}
+  .row{display:flex;gap:10px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .row .ic{width:34px;height:34px;border-radius:9px;background:#eef2ff;color:var(--indigo);display:grid;place-items:center;flex:none;font-size:1rem}
+  .row .k{font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+  .row .v{font-weight:600}
+  .masked{display:inline-block;background:#eef2ff;color:#94a3b8;border-radius:6px;padding:2px 10px;letter-spacing:2px;font-weight:700;filter:blur(.3px)}
+  .reveal{color:var(--ink)}
+  .map{height:150px;border-radius:10px;margin-top:14px;position:relative;overflow:hidden;border:1px solid var(--line);background:
+     repeating-linear-gradient(45deg,#eef2f7,#eef2f7 12px,#e6ebf2 12px,#e6ebf2 24px)}
+  .map .area{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:150px;height:150px;border-radius:50%;background:rgba(124,58,237,.16);border:2px dashed rgba(124,58,237,.5)}
+  .map .pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);font-size:1.8rem;display:none}
+  .map .caption{position:absolute;bottom:8px;left:10px;font-size:.74rem;font-weight:600;color:var(--muted);background:rgba(255,255,255,.85);padding:3px 9px;border-radius:6px}
+  .unlocked .map .area{display:none}
+  .unlocked .map .pin{display:block}
+  .cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{border:0;border-radius:10px;padding:11px 18px;font-family:inherit;font-weight:700;font-size:.9rem;cursor:pointer}
+  .btn.primary{background:var(--grad);color:#fff}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--indigo)}
+  .note{font-size:.86rem;color:var(--muted);margin-top:16px}
+  .why{margin-top:26px;border-left:4px solid var(--purple);background:#faf5ff;border-radius:0 var(--radius) var(--radius) 0;padding:18px 22px}
+  .why h3{color:var(--indigo-dark);font-size:1.05rem;margin-bottom:6px}
+  .badge-v{display:inline-flex;align-items:center;gap:6px;color:var(--good);font-weight:700;font-size:.86rem}
+  footer{background:#111827;color:#9ca3af;padding:30px 0;font-size:.84rem;margin-top:10px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer strong{color:#fff}
+  .demo-flag{background:#ecfdf5;color:#059669;font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:999px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="row">
+  <a class="back" href="index.html">&larr; Spec Pack</a>
+  <span class="brand"><span class="logo">S</span> SpaceLink</span>
+</div></div>
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">Working demo · Unlock model</span>
+  <h1>Browse freely — unlock identity on agreement</h1>
+  <p>Seekers can see and compare spaces, but exact location and provider contact stay hidden until both parties accept Terms of Trade. This keeps deals on-platform. Flip the switch to see both states.</p>
+</div></header>
+
+<section><div class="wrap">
+  <div class="demoControls" id="root">
+    <span class="lbl">Terms of Trade</span>
+    <label class="switch">
+      <input type="checkbox" id="toggle">
+      <span class="track"></span>
+    </label>
+    <span class="statePill" id="statePill">🔒 Not accepted — details hidden</span>
+  </div>
+
+  <div class="listing locked" id="listing">
+    <div class="photo"><span class="tag">Chilled / refrigerated</span><span class="tag">Pallet racking</span></div>
+    <div class="body">
+      <div class="title">Premium Cold Storage — Canterbury</div>
+      <div class="badge-v" style="margin-top:6px">✔ Verified provider · NZBN checked</div>
+
+      <div style="margin-top:14px">
+        <div class="row"><div class="ic">📍</div><div>
+          <div class="k">Location</div>
+          <div class="v" id="loc">Riccarton area, Christchurch <span class="masked">approx</span></div>
+        </div></div>
+        <div class="row"><div class="ic">🏢</div><div>
+          <div class="k">Provider</div>
+          <div class="v" id="prov"><span class="masked">•••••••••••••</span></div>
+        </div></div>
+        <div class="row"><div class="ic">📞</div><div>
+          <div class="k">Phone</div>
+          <div class="v" id="phone"><span class="masked">••• ••• ••••</span></div>
+        </div></div>
+        <div class="row"><div class="ic">✉️</div><div>
+          <div class="k">Email</div>
+          <div class="v" id="email"><span class="masked">•••••••@••••••</span></div>
+        </div></div>
+      </div>
+
+      <div class="map">
+        <div class="area"></div>
+        <div class="pin">📍</div>
+        <div class="caption" id="mapcap">Approximate area only</div>
+      </div>
+
+      <div class="cta">
+        <button class="btn primary" id="actBtn">Accept Terms of Trade to unlock</button>
+        <button class="btn ghost">Message via SpaceLink</button>
+      </div>
+      <p class="note" id="note">While locked, the seeker still gets size, price, environment, compliance and reviews — everything needed to choose — but nothing that lets the two parties skip the platform.</p>
+    </div>
+  </div>
+
+  <div class="why">
+    <h3>Why it works this way</h3>
+    <p class="muted">Disintermediation — parties connecting off-platform — is the biggest risk to a marketplace. By revealing identity and exact location only after both sides commit through SpaceLink, the platform stays in the loop for the transaction, payments and trust, without making browsing any harder.</p>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div><strong>SpaceLink</strong> · Working demo — Unlock model<br>Concept demonstration for the Codeaza build team</div>
+  <div style="text-align:right"><span class="demo-flag">INTERACTIVE DEMO</span></div>
+</div></footer>
+
+<script>
+  var t=document.getElementById('toggle'), L=document.getElementById('listing'),
+      sp=document.getElementById('statePill'), btn=document.getElementById('actBtn');
+  var locked={loc:'Riccarton area, Christchurch <span class="masked">approx</span>',prov:'<span class="masked">•••••••••••••</span>',phone:'<span class="masked">••• ••• ••••</span>',email:'<span class="masked">•••••••@••••••</span>',cap:'Approximate area only'};
+  var open_={loc:'<span class="reveal">529 Industrial Street, Christchurch 8011</span>',prov:'<span class="reveal">Canterbury Cold Stores Ltd</span>',phone:'<span class="reveal">03 555 0303</span>',email:'<span class="reveal">ops@canterburycoldstores.co.nz</span>',cap:'Exact location'};
+  function set(s){
+    document.getElementById('loc').innerHTML=s.loc;
+    document.getElementById('prov').innerHTML=s.prov;
+    document.getElementById('phone').innerHTML=s.phone;
+    document.getElementById('email').innerHTML=s.email;
+    document.getElementById('mapcap').textContent=s.cap;
+  }
+  function render(){
+    if(t.checked){
+      L.classList.remove('locked');L.classList.add('unlocked');
+      sp.textContent='🔓 Accepted by both parties — details revealed';
+      sp.style.background='#ecfdf5';sp.style.color='#059669';
+      btn.textContent='Details unlocked ✓';btn.disabled=true;btn.style.opacity=.6;
+      set(open_);
+    }else{
+      L.classList.add('locked');L.classList.remove('unlocked');
+      sp.textContent='🔒 Not accepted — details hidden';sp.style.background='';sp.style.color='';
+      btn.textContent='Accept Terms of Trade to unlock';btn.disabled=false;btn.style.opacity=1;
+      set(locked);
+    }
+  }
+  t.addEventListener('change',render);
+  btn.addEventListener('click',function(){t.checked=true;render();});
+  render();
+</script>
+</body>
+</html>

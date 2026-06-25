@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpaceLink · Demo — Clean Listing Fields</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--indigo:#4f46e5;--purple:#7c3aed;--indigo-dark:#3730a3;--grad:linear-gradient(135deg,#4f46e5,#7c3aed);
+    --bg:#f8fafc;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--card:#fff;--radius:12px;--shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);--good:#059669}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(248,250,252,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .row{max-width:980px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+  .back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--indigo);font-weight:600;font-size:.9rem}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.95rem}
+  .logo{width:26px;height:26px;border-radius:7px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:800;font-size:.85rem}
+  .hero{background:var(--grad);color:#fff;padding:40px 0 46px}
+  .eyebrow{display:inline-block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;background:rgba(255,255,255,.18);padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  .hero h1{font-size:1.9rem;font-weight:800;letter-spacing:-.02em}
+  .hero p{margin-top:10px;max-width:66ch;color:rgba(255,255,255,.92)}
+  section{padding:32px 0}
+  .layout{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start}
+  @media(max-width:860px){.layout{grid-template-columns:1fr}}
+  .field{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);margin-bottom:18px}
+  .field h3{font-size:1.05rem;font-weight:800}
+  .field .q{font-size:.84rem;color:var(--purple);font-weight:600;margin:2px 0 14px}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+  @media(max-width:560px){.opts{grid-template-columns:1fr}}
+  .opt{display:flex;align-items:center;gap:9px;font-size:.92rem;padding:3px 0;cursor:pointer}
+  .opt input{width:17px;height:17px;accent-color:var(--indigo);cursor:pointer}
+  .summary{position:sticky;top:74px;background:#111827;color:#e5e7eb;border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+  .summary h3{color:#fff;font-size:1.02rem;margin-bottom:4px}
+  .summary .sub{color:#9ca3af;font-size:.82rem;margin-bottom:14px}
+  .sumField{padding:10px 0;border-bottom:1px solid #374151}
+  .sumField:last-child{border-bottom:0}
+  .sumField .lab{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#9ca3af;font-weight:700}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .chip{background:rgba(124,58,237,.25);color:#e9d5ff;font-size:.78rem;font-weight:600;padding:3px 9px;border-radius:999px}
+  .empty{color:#6b7280;font-size:.82rem;font-style:italic;margin-top:4px}
+  .callout{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;font-size:.92rem;color:#065f46}
+  .callout strong{color:#047857}
+  .new{display:inline-block;background:#ecfdf5;color:var(--good);font-size:.66rem;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:middle}
+  footer{background:#111827;color:#9ca3af;padding:30px 0;font-size:.84rem;margin-top:14px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer strong{color:#fff}
+  .demo-flag{background:#ecfdf5;color:#059669;font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:999px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="row">
+  <a class="back" href="index.html">&larr; Spec Pack</a>
+  <span class="brand"><span class="logo">S</span> SpaceLink</span>
+</div></div>
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">Working demo · Clean listing fields</span>
+  <h1>Five fields, each answering a different question</h1>
+  <p>The corrected taxonomy: no option appears in more than one field, so "Dry storage" can't show up four times. Tick anything — the live summary shows how each field stays distinct, and Services finally has a home.</p>
+</div></header>
+
+<section><div class="wrap">
+  <div class="callout"><strong>What changed:</strong> storage <em>type</em>, <em>environment</em>, <em>goods</em>, <em>format</em> and <em>services</em> are now orthogonal — pick from every field without ever ticking the same concept twice.</div>
+
+  <div class="layout">
+    <div>
+      <!-- 1 TYPE -->
+      <div class="field" data-field="Storage type">
+        <h3>Storage type</h3><div class="q">What kind of facility/operation is this?</div>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" value="General warehouse">General warehouse</label>
+          <label class="opt"><input type="checkbox" value="Distribution centre">Distribution centre</label>
+          <label class="opt"><input type="checkbox" value="Fulfilment centre">Fulfilment centre</label>
+          <label class="opt"><input type="checkbox" value="Cross-dock / transload">Cross-dock / transload facility</label>
+          <label class="opt"><input type="checkbox" value="Bonded / customs-controlled">Bonded / customs-controlled</label>
+          <label class="opt"><input type="checkbox" value="Container & yard">Container &amp; yard storage</label>
+          <label class="opt"><input type="checkbox" value="Outdoor / open-air">Outdoor / open-air storage</label>
+          <label class="opt"><input type="checkbox" value="Self-storage / small units">Self-storage / small units</label>
+        </div>
+      </div>
+      <!-- 2 ENVIRONMENT -->
+      <div class="field" data-field="Environment">
+        <h3>Storage environment</h3><div class="q">What conditions does the space hold?</div>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" value="Ambient / dry">Ambient / dry (unconditioned)</label>
+          <label class="opt"><input type="checkbox" value="Climate-controlled">Climate-controlled (temp + humidity)</label>
+          <label class="opt"><input type="checkbox" value="Chilled / refrigerated">Chilled / refrigerated (2–8°C)</label>
+          <label class="opt"><input type="checkbox" value="Frozen">Frozen (-18 to -25°C)</label>
+          <label class="opt"><input type="checkbox" value="Humidity-controlled">Humidity-controlled</label>
+        </div>
+      </div>
+      <!-- 3 GOODS -->
+      <div class="field" data-field="Goods type">
+        <h3>Goods type</h3><div class="q">What products can be stored here?</div>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" value="General / dry goods">General / dry goods</label>
+          <label class="opt"><input type="checkbox" value="Food & beverage">Food &amp; beverage</label>
+          <label class="opt"><input type="checkbox" value="Perishables">Perishables</label>
+          <label class="opt"><input type="checkbox" value="Pharmaceuticals & healthcare">Pharmaceuticals &amp; healthcare</label>
+          <label class="opt"><input type="checkbox" value="Dangerous / hazardous goods">Dangerous / hazardous goods</label>
+          <label class="opt"><input type="checkbox" value="Chemicals">Chemicals</label>
+          <label class="opt"><input type="checkbox" value="Electronics & high-value">Electronics &amp; high-value</label>
+          <label class="opt"><input type="checkbox" value="Automotive parts">Automotive parts</label>
+          <label class="opt"><input type="checkbox" value="Textiles & apparel">Textiles &amp; apparel</label>
+          <label class="opt"><input type="checkbox" value="Building materials">Building materials</label>
+          <label class="opt"><input type="checkbox" value="Consumer goods / FMCG">Consumer goods / FMCG</label>
+          <label class="opt"><input type="checkbox" value="Bulk / raw materials">Bulk commodities / raw materials</label>
+          <label class="opt"><input type="checkbox" value="Fragile goods">Fragile goods</label>
+          <label class="opt"><input type="checkbox" value="Oversized / heavy machinery">Oversized / heavy machinery</label>
+        </div>
+      </div>
+      <!-- 4 FORMAT -->
+      <div class="field" data-field="Storage format">
+        <h3>Storage format</h3><div class="q">How is it physically stored / racked?</div>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" value="Pallet racking (selective)">Pallet racking (selective)</label>
+          <label class="opt"><input type="checkbox" value="Drive-in / drive-through">Drive-in / drive-through racking</label>
+          <label class="opt"><input type="checkbox" value="Push-back / pallet-flow">Push-back / pallet-flow racking</label>
+          <label class="opt"><input type="checkbox" value="Cantilever racking">Cantilever racking</label>
+          <label class="opt"><input type="checkbox" value="Floor / block stacked">Floor / block stacked</label>
+          <label class="opt"><input type="checkbox" value="Bulk floor storage">Bulk floor storage</label>
+          <label class="opt"><input type="checkbox" value="Shelving / small-parts bins">Shelving / small-parts bins</label>
+          <label class="opt"><input type="checkbox" value="Mezzanine">Mezzanine</label>
+          <label class="opt"><input type="checkbox" value="Mobile racking">Mobile racking</label>
+          <label class="opt"><input type="checkbox" value="Automated (AS/RS)">Automated (AS/RS)</label>
+        </div>
+      </div>
+      <!-- 5 SERVICES -->
+      <div class="field" data-field="Services offered">
+        <h3>Services offered <span class="new">NEW FIELD</span></h3><div class="q">What value-added services are available?</div>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" value="Pick & pack / fulfilment">Pick &amp; pack / e-commerce fulfilment</label>
+          <label class="opt"><input type="checkbox" value="Third-party logistics (3PL)">Third-party logistics (3PL)</label>
+          <label class="opt"><input type="checkbox" value="Cross-docking / transloading">Cross-docking / transloading</label>
+          <label class="opt"><input type="checkbox" value="Kitting & assembly">Kitting &amp; assembly</label>
+          <label class="opt"><input type="checkbox" value="Labelling & repackaging">Labelling &amp; repackaging</label>
+          <label class="opt"><input type="checkbox" value="Returns / reverse logistics">Returns / reverse logistics</label>
+          <label class="opt"><input type="checkbox" value="Freight forwarding / transport">Freight forwarding / transport</label>
+          <label class="opt"><input type="checkbox" value="Inventory management">Inventory management</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary" id="summary">
+      <h3>Live selection</h3>
+      <div class="sub">Notice each pick lands in exactly one field.</div>
+      <div id="sumBody"></div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div><strong>SpaceLink</strong> · Working demo — Clean listing fields<br>Concept demonstration for the Codeaza build team</div>
+  <div style="text-align:right"><span class="demo-flag">INTERACTIVE DEMO</span></div>
+</div></footer>
+
+<script>
+  var fields=document.querySelectorAll('.field');
+  var sumBody=document.getElementById('sumBody');
+  function render(){
+    var html='';
+    fields.forEach(function(f){
+      var name=f.getAttribute('data-field');
+      var picked=[].slice.call(f.querySelectorAll('input:checked')).map(function(i){return i.value;});
+      html+='<div class="sumField"><div class="lab">'+name+'</div>';
+      if(picked.length){html+='<div class="chips">'+picked.map(function(p){return '<span class="chip">'+p+'</span>';}).join('')+'</div>';}
+      else{html+='<div class="empty">— none selected —</div>';}
+      html+='</div>';
+    });
+    sumBody.innerHTML=html;
+  }
+  document.querySelectorAll('.field input').forEach(function(i){i.addEventListener('change',render);});
+  render();
+</script>
+</body>
+</html>

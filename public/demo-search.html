@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpaceLink · Demo — Flexible Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--indigo:#4f46e5;--purple:#7c3aed;--indigo-dark:#3730a3;--grad:linear-gradient(135deg,#4f46e5,#7c3aed);
+    --bg:#f8fafc;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--card:#fff;--radius:12px;--shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);--good:#059669}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(248,250,252,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .row{max-width:980px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+  .back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--indigo);font-weight:600;font-size:.9rem}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.95rem}
+  .logo{width:26px;height:26px;border-radius:7px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:800;font-size:.85rem}
+  .hero{background:var(--grad);color:#fff;padding:40px 0 46px}
+  .eyebrow{display:inline-block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;background:rgba(255,255,255,.18);padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  .hero h1{font-size:1.9rem;font-weight:800;letter-spacing:-.02em}
+  .hero p{margin-top:10px;max-width:66ch;color:rgba(255,255,255,.92)}
+  section{padding:30px 0}
+  h3.q{font-size:1.05rem;font-weight:800;margin-bottom:12px}
+  .personas{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+  @media(max-width:760px){.personas{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:460px){.personas{grid-template-columns:repeat(2,1fr)}}
+  .pers{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 10px;text-align:center;cursor:pointer;transition:.12s;box-shadow:var(--shadow)}
+  .pers:hover{border-color:#c7d2fe}
+  .pers.active{background:var(--grad);color:#fff;border-color:transparent}
+  .pers .em{font-size:1.5rem;display:block;margin-bottom:6px}
+  .pers .nm{font-size:.82rem;font-weight:700}
+  .controls{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);margin-top:20px}
+  .ctl label{font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;display:block;margin-bottom:5px}
+  select{padding:9px 12px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:.92rem;background:#fff}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .seg button{border:0;background:#fff;padding:9px 15px;font-family:inherit;font-weight:600;font-size:.84rem;color:var(--muted);cursor:pointer}
+  .seg button.on{background:var(--grad);color:#fff}
+  .hint{background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;padding:12px 16px;margin-top:16px;font-size:.9rem;color:var(--indigo-dark)}
+  .results{margin-top:18px;display:grid;gap:14px}
+  .res{display:flex;gap:16px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);align-items:center}
+  .res .ph{width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,#c7d2fe,#e9d5ff);flex:none;display:grid;place-items:center;font-size:1.6rem}
+  .res .info{flex:1}
+  .res .nm{font-weight:700}
+  .res .meta{font-size:.84rem;color:var(--muted)}
+  .res .right{text-align:right}
+  .res .price{font-weight:800;color:var(--indigo)}
+  .book{display:inline-block;margin-top:6px;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px}
+  .book.instant{background:#ecfdf5;color:var(--good)}
+  .book.request{background:#fef3c7;color:#92400e}
+  .badge{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;background:#eef2ff;color:var(--indigo);margin-left:6px}
+  footer{background:#111827;color:#9ca3af;padding:30px 0;font-size:.84rem;margin-top:16px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer strong{color:#fff}
+  .demo-flag{background:#ecfdf5;color:#059669;font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:999px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="row">
+  <a class="back" href="index.html">&larr; Spec Pack</a>
+  <span class="brand"><span class="logo">S</span> SpaceLink</span>
+</div></div>
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">Working demo · Flexible search</span>
+  <h1>One search that fits a few boxes — or a corporate contract</h1>
+  <p>Start with what you're storing, and the units, filters and results adapt. A private user thinks in boxes and units; a logistics manager thinks in pallets and m². Same platform, different lens.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h3 class="q">What are you storing?</h3>
+  <div class="personas" id="personas">
+    <div class="pers active" data-p="personal"><span class="em">📦</span><span class="nm">Personal items</span></div>
+    <div class="pers" data-p="business"><span class="em">🏪</span><span class="nm">Business stock</span></div>
+    <div class="pers" data-p="pallets"><span class="em">🟫</span><span class="nm">Pallets</span></div>
+    <div class="pers" data-p="vehicle"><span class="em">🚗</span><span class="nm">Vehicle</span></div>
+    <div class="pers" data-p="documents"><span class="em">🗄️</span><span class="nm">Documents</span></div>
+    <div class="pers" data-p="cold"><span class="em">❄️</span><span class="nm">Cold-chain</span></div>
+  </div>
+
+  <div class="controls">
+    <div class="ctl"><label>Measured in</label><select id="unit"></select></div>
+    <div class="ctl"><label>How long</label>
+      <div class="seg" id="dur"><button data-d="short" class="on">Short term</button><button data-d="long">Long term</button></div>
+    </div>
+    <div class="ctl"><label>Location</label><select><option>Auckland</option><option>Wellington</option><option>Christchurch</option></select></div>
+  </div>
+
+  <div class="hint" id="hint"></div>
+  <div class="results" id="results"></div>
+</div></section>
+
+<footer><div class="wrap">
+  <div><strong>SpaceLink</strong> · Working demo — Flexible search<br>Concept demonstration for the Codeaza build team</div>
+  <div style="text-align:right"><span class="demo-flag">INTERACTIVE DEMO</span></div>
+</div></footer>
+
+<script>
+  var P={
+    personal:{em:'📦',units:['Small unit','By the box','m³'],hint:'Personal storage — priced per unit or per box, book instantly, keep it as long as you like.',
+      results:[
+        {em:'📦',nm:'3 m² Storage Locker — Penrose',meta:'Ground floor · 24/7 access · drive-up',price:'$45/mo',book:'instant',badge:'Self-storage'},
+        {em:'📦',nm:'10 m² Unit — Mt Wellington',meta:'Alarmed · shelving included',price:'$120/mo',book:'instant',badge:'Self-storage'},
+        {em:'🚪',nm:'Garage-sized Unit — Henderson',meta:'Roller door · vehicle-friendly',price:'$210/mo',book:'instant'}
+      ]},
+    business:{em:'🏪',units:['m²','Pallet','Whole room'],hint:'Business stock — search by floor area or pallets, mix short overflow with long-term space.',
+      results:[
+        {em:'🏬',nm:'80 m² Dry Storage Room — East Tamaki',meta:'Racking optional · loading dock',price:'$1,000/mo',book:'instant',badge:'Dry'},
+        {em:'📦',nm:'E-commerce Space — North Shore',meta:'Pick & pack available · high ceilings',price:'$10.50/m²/mo',book:'request',badge:'Fulfilment'},
+        {em:'🏭',nm:'Flexible Warehouse — Wiri',meta:'From 50 m², scale as you grow',price:'$12/m²/mo',book:'request'}
+      ]},
+    pallets:{em:'🟫',units:['Pallet','m²'],hint:'Pallet storage — priced per pallet position, weekly or monthly. Great for seasonal stock.',
+      results:[
+        {em:'🟫',nm:'Pallet Racking — Mangere',meta:'In/out handling · WMS available',price:'$4.50/pallet/wk',book:'instant',badge:'Pallet racking'},
+        {em:'🟫',nm:'Bulk Pallet Storage — Wiri',meta:'Min 20 positions · forklift on site',price:'$18/pallet/mo',book:'request'},
+        {em:'🏭',nm:'Distribution Centre — Airport',meta:'500+ positions · cross-dock',price:'Quote',book:'request',badge:'DC'}
+      ]},
+    vehicle:{em:'🚗',units:['Per bay','Per vehicle'],hint:'Vehicle storage — priced per bay. Covered or outdoor, short stays or long-term.',
+      results:[
+        {em:'🚗',nm:'Covered Car Bay — Grey Lynn',meta:'Secure · CCTV · 24/7',price:'$95/mo',book:'instant'},
+        {em:'🚐',nm:'Caravan / Boat Yard — Silverdale',meta:'Outdoor · gated · power available',price:'$140/mo',book:'instant',badge:'Outdoor'},
+        {em:'🏢',nm:'Fleet Parking — Penrose',meta:'Multiple bays · monthly invoice',price:'Quote',book:'request'}
+      ]},
+    documents:{em:'🗄️',units:['Archive box','m²'],hint:'Document & archive storage — priced per box or per m², usually long-term and secure.',
+      results:[
+        {em:'🗃️',nm:'Document Archive — CBD fringe',meta:'Climate & dust controlled · retrieval service',price:'$2.20/box/mo',book:'instant',badge:'Secure'},
+        {em:'🗄️',nm:'Records Storage — Penrose',meta:'Barcoded · scan-on-demand',price:'$1,200/mo',book:'request'},
+        {em:'🔐',nm:'Secure Vault Space — Newmarket',meta:'Restricted access · audit log',price:'Quote',book:'request',badge:'High security'}
+      ]},
+    cold:{em:'❄️',units:['m²','Pallet'],hint:'Cold-chain — filtered to MPI-compliant chilled/frozen space. Larger needs go to quote.',
+      results:[
+        {em:'❄️',nm:'Chilled Storage (2–8°C) — Mt Wellington',meta:'MPI registered · 24/7 monitoring',price:'$22/m²/mo',book:'request',badge:'MPI'},
+        {em:'🧊',nm:'Frozen Store (-25°C) — Wiri',meta:'Blast freezing available',price:'$28/m²/mo',book:'request',badge:'MPI'},
+        {em:'🥬',nm:'Fresh Produce Cold Room — Airport',meta:'Humidity controlled · dock-to-store',price:'Quote',book:'request'}
+      ]}
+  };
+  var cur='personal', dur='short';
+  function fillUnits(p){
+    var u=document.getElementById('unit');u.innerHTML='';
+    P[p].units.forEach(function(x){var o=document.createElement('option');o.textContent=x;u.appendChild(o);});
+  }
+  function render(){
+    var d=P[cur];
+    document.getElementById('hint').innerHTML='💡 '+d.hint+' &nbsp; <strong>'+(dur==='short'?'Short term':'Long term')+'</strong> selected.';
+    var html='';
+    d.results.forEach(function(r){
+      html+='<div class="res"><div class="ph">'+r.em+'</div><div class="info"><div class="nm">'+r.nm+(r.badge?'<span class="badge">'+r.badge+'</span>':'')+'</div><div class="meta">'+r.meta+'</div></div>'+
+        '<div class="right"><div class="price">'+r.price+'</div><span class="book '+r.book+'">'+(r.book==='instant'?'⚡ Instant book':'✉ Request to book')+'</span></div></div>';
+    });
+    document.getElementById('results').innerHTML=html;
+  }
+  document.querySelectorAll('.pers').forEach(function(el){
+    el.addEventListener('click',function(){
+      document.querySelectorAll('.pers').forEach(function(x){x.classList.remove('active');});
+      el.classList.add('active');cur=el.getAttribute('data-p');fillUnits(cur);render();
+    });
+  });
+  document.querySelectorAll('#dur button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#dur button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');dur=b.getAttribute('data-d');render();
+    });
+  });
+  fillUnits('personal');render();
+</script>
+</body>
+</html>

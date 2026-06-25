@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpaceLink · Demo — Flexible Inventory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--indigo:#4f46e5;--purple:#7c3aed;--indigo-dark:#3730a3;--grad:linear-gradient(135deg,#4f46e5,#7c3aed);
+    --bg:#f8fafc;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--card:#fff;--radius:12px;--shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);--good:#059669;--amber:#b45309}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(248,250,252,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .row{max-width:980px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+  .back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--indigo);font-weight:600;font-size:.9rem}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.95rem}
+  .logo{width:26px;height:26px;border-radius:7px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:800;font-size:.85rem}
+  .hero{background:var(--grad);color:#fff;padding:40px 0 46px}
+  .eyebrow{display:inline-block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;background:rgba(255,255,255,.18);padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  .hero h1{font-size:1.9rem;font-weight:800;letter-spacing:-.02em}
+  .hero p{margin-top:10px;max-width:66ch;color:rgba(255,255,255,.92)}
+  section{padding:30px 0}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-bottom:18px}
+  .seg button{border:0;background:#fff;padding:11px 20px;font-family:inherit;font-weight:700;font-size:.9rem;color:var(--muted);cursor:pointer}
+  .seg button.on{background:var(--grad);color:#fff}
+  .layout{display:grid;grid-template-columns:1fr 300px;gap:22px;align-items:start}
+  @media(max-width:820px){.layout{grid-template-columns:1fr}}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+  .panel h3{font-size:1.05rem;font-weight:800;margin-bottom:2px}
+  .panel .sub{font-size:.84rem;color:var(--muted);margin-bottom:14px}
+  .unit{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+  .unit .tag{flex:none;width:42px;height:42px;border-radius:9px;background:#eef2ff;color:var(--indigo);display:grid;place-items:center;font-size:1.1rem;font-weight:700}
+  .unit .grow{flex:1}
+  .unit .nm{font-weight:700}
+  .unit .meta{font-size:.83rem;color:var(--muted)}
+  .unit .price{font-weight:800;color:var(--indigo);white-space:nowrap}
+  .status{font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:999px;cursor:pointer;border:0;font-family:inherit}
+  .status.avail{background:#ecfdf5;color:var(--good)}
+  .status.booked{background:#fef3c7;color:var(--amber)}
+  .rm{background:none;border:0;color:#cbd5e1;font-size:1.2rem;cursor:pointer;padding:0 4px}
+  .rm:hover{color:#ef4444}
+  .addrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:end}
+  .addrow .f{display:flex;flex-direction:column}
+  .addrow label{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;margin-bottom:3px}
+  .addrow input{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:.88rem;width:110px}
+  .addbtn{background:var(--grad);color:#fff;border:0;border-radius:9px;padding:9px 16px;font-family:inherit;font-weight:700;font-size:.86rem;cursor:pointer}
+  .whole{padding:18px;border:1px dashed #c7d2fe;border-radius:10px;background:#f8faff}
+  .summary{position:sticky;top:74px;background:#111827;color:#e5e7eb;border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+  .summary h3{color:#fff;font-size:1.02rem;margin-bottom:12px}
+  .bar{height:14px;border-radius:8px;background:#374151;overflow:hidden;margin:6px 0 4px;display:flex}
+  .bar .fill{background:linear-gradient(90deg,#7c3aed,#4f46e5);height:100%}
+  .ln{display:flex;justify-content:space-between;padding:6px 0;font-size:.9rem}
+  .ln .v{font-weight:700;color:#fff}
+  .ln.big .v{font-size:1.2rem;color:#a7f3d0}
+  .who{background:rgba(124,58,237,.2);border-radius:9px;padding:11px 13px;margin-top:12px;font-size:.82rem;color:#e9d5ff}
+  .note{font-size:.82rem;color:var(--muted);margin-top:14px;font-style:italic}
+  footer{background:#111827;color:#9ca3af;padding:30px 0;font-size:.84rem;margin-top:16px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer strong{color:#fff}
+  .demo-flag{background:#ecfdf5;color:#059669;font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:999px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="row">
+  <a class="back" href="index.html">&larr; Spec Pack</a>
+  <span class="brand"><span class="logo">S</span> SpaceLink</span>
+</div></div>
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">Working demo · Flexible inventory</span>
+  <h1>One warehouse, serving a few boxes and a bulk lease at once</h1>
+  <p>Providers can list a whole space, or subdivide it into units and zones — each with its own size, price and availability. That's how the same site serves a private user's single unit and a corporate's bulk contract.</p>
+</div></header>
+
+<section><div class="wrap">
+  <div class="seg" id="mode">
+    <button data-m="whole" class="">List whole space</button>
+    <button data-m="sub" class="on">Subdivide into units / zones</button>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <h3 id="ptitle">Units &amp; zones</h3>
+      <div class="sub" id="psub">Add as many as you like — mix small units for private users with big zones for businesses.</div>
+      <div id="content"></div>
+    </div>
+
+    <div class="summary">
+      <h3>Capacity &amp; revenue</h3>
+      <div class="ln"><span>Total space</span><span class="v">1,000 m²</span></div>
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="ln"><span>Allocated</span><span class="v" id="alloc">0 m²</span></div>
+      <div class="ln"><span>Still available</span><span class="v" id="avail">1,000 m²</span></div>
+      <div class="ln big"><span>Potential / mo</span><span class="v" id="rev">$0</span></div>
+      <div class="who" id="who"></div>
+      <p class="note" style="color:#9ca3af">Booked units still count as revenue; available units are what seekers can book right now.</p>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div><strong>SpaceLink</strong> · Working demo — Flexible inventory<br>Concept demonstration for the Codeaza build team</div>
+  <div style="text-align:right"><span class="demo-flag">INTERACTIVE DEMO</span></div>
+</div></footer>
+
+<script>
+  var TOTAL=1000;
+  var mode='sub';
+  var units=[
+    {nm:'Self-storage Unit A',size:10,price:120,booked:false,who:'private'},
+    {nm:'Self-storage Unit B',size:10,price:120,booked:true,who:'private'},
+    {nm:'Pallet Zone (50 positions)',size:140,price:2200,booked:false,who:'business'},
+    {nm:'Bulk Lease — Zone 1',size:600,price:7200,booked:true,who:'corporate'}
+  ];
+  function money(n){return '$'+Math.round(n).toLocaleString('en-NZ');}
+  function icon(w){return w==='private'?'📦':w==='business'?'🏪':'🏭';}
+
+  function renderUnits(){
+    var c=document.getElementById('content');
+    var html='';
+    units.forEach(function(u,idx){
+      html+='<div class="unit"><div class="tag">'+icon(u.who)+'</div><div class="grow"><div class="nm">'+u.nm+'</div>'+
+        '<div class="meta">'+u.size+' m² · '+money(u.price)+'/mo</div></div>'+
+        '<button class="status '+(u.booked?'booked':'avail')+'" data-t="'+idx+'">'+(u.booked?'Booked':'Available')+'</button>'+
+        '<button class="rm" data-r="'+idx+'" title="Remove">&times;</button></div>';
+    });
+    html+='<div class="addrow"><div class="f"><label>Name</label><input id="nNm" placeholder="e.g. Unit C" style="width:150px"></div>'+
+      '<div class="f"><label>Size m²</label><input id="nSize" type="number" value="10"></div>'+
+      '<div class="f"><label>$/mo</label><input id="nPrice" type="number" value="120"></div>'+
+      '<button class="addbtn" id="addBtn">+ Add unit</button></div>';
+    c.innerHTML=html;
+    c.querySelectorAll('[data-t]').forEach(function(b){b.addEventListener('click',function(){units[b.getAttribute('data-t')].booked=!units[b.getAttribute('data-t')].booked;render();});});
+    c.querySelectorAll('[data-r]').forEach(function(b){b.addEventListener('click',function(){units.splice(b.getAttribute('data-r'),1);render();});});
+    document.getElementById('addBtn').addEventListener('click',function(){
+      var nm=document.getElementById('nNm').value||'New unit';
+      var size=parseFloat(document.getElementById('nSize').value||0);
+      var price=parseFloat(document.getElementById('nPrice').value||0);
+      var who=size<=20?'private':size<=200?'business':'corporate';
+      units.push({nm:nm,size:size,price:price,booked:false,who:who});render();
+    });
+  }
+  function renderWhole(){
+    document.getElementById('content').innerHTML=
+      '<div class="whole"><div class="unit" style="border:0;margin:0;padding:0"><div class="tag">🏭</div>'+
+      '<div class="grow"><div class="nm">Whole warehouse — 1,000 m²</div><div class="meta">Single tenancy · one booking</div></div>'+
+      '<div class="price">$12,000/mo</div></div></div>'+
+      '<p class="note">Simple, but only one tenant at a time — a private user wanting 10 m² can\'t book here. Subdividing unlocks the full spectrum.</p>';
+  }
+  function render(){
+    if(mode==='whole'){
+      document.getElementById('ptitle').textContent='Whole space';
+      document.getElementById('psub').textContent='One listing, one tenant. Best for a single large lease.';
+      renderWhole();
+      document.getElementById('alloc').textContent='1,000 m²';
+      document.getElementById('avail').textContent='0 m² (whole-space)';
+      document.getElementById('fill').style.width='100%';
+      document.getElementById('rev').textContent='$12,000';
+      document.getElementById('who').innerHTML='Serves: <strong>one corporate tenant</strong>.';
+      return;
+    }
+    document.getElementById('ptitle').textContent='Units & zones';
+    document.getElementById('psub').textContent='Add as many as you like — mix small units for private users with big zones for businesses.';
+    renderUnits();
+    var alloc=units.reduce(function(s,u){return s+u.size;},0);
+    var rev=units.reduce(function(s,u){return s+u.price;},0);
+    var avail=Math.max(0,TOTAL-alloc);
+    document.getElementById('alloc').textContent=alloc.toLocaleString()+' m²';
+    document.getElementById('avail').textContent=avail.toLocaleString()+' m²';
+    document.getElementById('fill').style.width=Math.min(100,alloc/TOTAL*100)+'%';
+    document.getElementById('rev').textContent=money(rev);
+    var kinds={};units.forEach(function(u){kinds[u.who]=(kinds[u.who]||0)+1;});
+    var label=Object.keys(kinds).map(function(k){return kinds[k]+' '+k;}).join(' · ');
+    document.getElementById('who').innerHTML='Serves at once: <strong>'+(label||'—')+'</strong>'+(alloc>TOTAL?'<br>⚠ Over capacity — reduce allocations.':'');
+  }
+  document.querySelectorAll('#mode button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#mode button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');mode=b.getAttribute('data-m');render();
+    });
+  });
+  render();
+</script>
+</body>
+</html>

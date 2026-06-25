@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpaceLink · Demo — Compare Spaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--indigo:#4f46e5;--purple:#7c3aed;--indigo-dark:#3730a3;--grad:linear-gradient(135deg,#4f46e5,#7c3aed);
+    --bg:#f8fafc;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--card:#fff;--radius:12px;--shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);--good:#059669}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(248,250,252,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .row{max-width:980px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+  .back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--indigo);font-weight:600;font-size:.9rem}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.95rem}
+  .logo{width:26px;height:26px;border-radius:7px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:800;font-size:.85rem}
+  .hero{background:var(--grad);color:#fff;padding:40px 0 46px}
+  .eyebrow{display:inline-block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;background:rgba(255,255,255,.18);padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  .hero h1{font-size:1.9rem;font-weight:800;letter-spacing:-.02em}
+  .hero p{margin-top:10px;max-width:66ch;color:rgba(255,255,255,.92)}
+  section{padding:30px 0}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;font-size:.86rem;color:var(--muted);align-items:center}
+  .pickers{display:flex;gap:8px;flex-wrap:wrap}
+  .pick{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;font-weight:600;font-size:.82rem;cursor:pointer;color:var(--muted)}
+  .pick.on{background:var(--grad);color:#fff;border-color:transparent}
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);background:#fff}
+  table{width:100%;border-collapse:collapse;min-width:620px}
+  th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:#f9fafb;position:sticky;top:0}
+  .rowlbl{font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;white-space:nowrap}
+  .colhead{min-width:180px}
+  .ph{height:90px;border-radius:9px;background:linear-gradient(135deg,#c7d2fe,#e9d5ff);display:grid;place-items:center;font-size:1.8rem;margin-bottom:10px}
+  .nm{font-weight:800;font-size:1rem}
+  .loc{font-size:.82rem;color:var(--muted)}
+  .big{font-weight:800;font-size:1.15rem}
+  .best{display:inline-block;font-size:.66rem;font-weight:800;color:#fff;background:var(--good);padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
+  .norm{color:var(--good);font-weight:700}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;background:#eef2ff;color:var(--indigo);margin:2px 4px 2px 0}
+  .badge.no{background:#f3f4f6;color:#9ca3af}
+  .stars{color:#f59e0b;font-weight:700}
+  .btn{display:inline-block;margin-top:4px;background:var(--grad);color:#fff;border:0;border-radius:9px;padding:9px 14px;font-family:inherit;font-weight:700;font-size:.84rem;cursor:pointer;text-align:center;width:100%}
+  .note{font-size:.82rem;color:var(--muted);margin-top:14px;font-style:italic}
+  footer{background:#111827;color:#9ca3af;padding:30px 0;font-size:.84rem;margin-top:16px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer strong{color:#fff}
+  .demo-flag{background:#ecfdf5;color:#059669;font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:999px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="row">
+  <a class="back" href="index.html">&larr; Spec Pack</a>
+  <span class="brand"><span class="logo">S</span> SpaceLink</span>
+</div></div>
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">Working demo · Compare spaces</span>
+  <h1>Compare like-for-like, side by side</h1>
+  <p>The homepage promises it — here it is. Prices normalised to one unit, distance, compliance and amenities lined up so the choice is obvious. Toggle a space in or out of the comparison.</p>
+</div></header>
+
+<section><div class="wrap">
+  <div class="toolbar">
+    <span>Comparing:</span>
+    <div class="pickers" id="pickers">
+      <span class="pick on" data-i="0">Mt Wellington Cold</span>
+      <span class="pick on" data-i="1">Airport Chilled DC</span>
+      <span class="pick on" data-i="2">Wiri Cold Room</span>
+      <span class="pick" data-i="3">East Tamaki Cool</span>
+    </div>
+  </div>
+
+  <div class="tablewrap"><table id="tbl"></table></div>
+  <p class="note">"Normalised price" puts every listing on the same $/m²/month basis so a cheap headline rate with a small space doesn't look better than it is. Lowest normalised price is tagged Best value.</p>
+</div></section>
+
+<footer><div class="wrap">
+  <div><strong>SpaceLink</strong> · Working demo — Compare spaces<br>Concept demonstration for the Codeaza build team</div>
+  <div style="text-align:right"><span class="demo-flag">INTERACTIVE DEMO</span></div>
+</div></footer>
+
+<script>
+  var DATA=[
+    {em:'❄️',nm:'Mt Wellington Cold',loc:'Auckland · 6 km',norm:22,size:'600 m²',dist:'6 km',env:'Chilled 2–8°C',comp:['MPI','HACCP'],am:{'24/7':true,'Dock':true,'CCTV':true,'WMS':false},rating:4.6,reviews:18,book:'Request'},
+    {em:'🧊',nm:'Airport Chilled DC',loc:'Auckland · 14 km',norm:19,size:'2,000 m²',dist:'14 km',env:'Chilled + frozen',comp:['MPI','HACCP','DG'],am:{'24/7':true,'Dock':true,'CCTV':true,'WMS':true},rating:4.8,reviews:32,book:'Request'},
+    {em:'❄️',nm:'Wiri Cold Room',loc:'Auckland · 18 km',norm:24,size:'500 m²',dist:'18 km',env:'Chilled 2–8°C',comp:['MPI'],am:{'24/7':false,'Dock':true,'CCTV':true,'WMS':false},rating:4.2,reviews:7,book:'Instant'},
+    {em:'🥬',nm:'East Tamaki Cool',loc:'Auckland · 9 km',norm:21,size:'350 m²',dist:'9 km',env:'Chilled + humidity',comp:['MPI','HACCP'],am:{'24/7':true,'Dock':false,'CCTV':true,'WMS':true},rating:4.5,reviews:11,book:'Instant'}
+  ];
+  var sel=[0,1,2];
+  var AMK=['24/7','Dock','CCTV','WMS'];
+  function render(){
+    var cols=sel.map(function(i){return DATA[i];});
+    var best=Math.min.apply(null,cols.map(function(c){return c.norm;}));
+    var h='<thead><tr><th class="rowlbl"></th>';
+    cols.forEach(function(c){h+='<th class="colhead"><div class="ph">'+c.em+'</div><div class="nm">'+c.nm+'</div><div class="loc">'+c.loc+'</div></th>';});
+    h+='</tr></thead><tbody>';
+    function row(lbl,fn){h+='<tr><td class="rowlbl">'+lbl+'</td>';cols.forEach(function(c){h+='<td>'+fn(c)+'</td>';});h+='</tr>';}
+    row('Normalised price',function(c){return '<span class="big norm">$'+c.norm+'</span> /m²/mo'+(c.norm===best?'<span class="best">Best value</span>':'');});
+    row('Total size',function(c){return c.size;});
+    row('Distance',function(c){return c.dist;});
+    row('Environment',function(c){return c.env;});
+    row('Compliance',function(c){return c.comp.map(function(x){return '<span class="badge">'+x+'</span>';}).join('');});
+    row('Amenities',function(c){return AMK.map(function(k){return '<span class="badge '+(c.am[k]?'':'no')+'">'+(c.am[k]?'✓ ':'✕ ')+k+'</span>';}).join('');});
+    row('Rating',function(c){return '<span class="stars">★ '+c.rating+'</span> <span class="loc">('+c.reviews+')</span>';});
+    row('Booking',function(c){return c.book==='Instant'?'⚡ Instant book':'✉ Request to book';});
+    row('',function(c){return '<button class="btn">View &amp; book</button>';});
+    h+='</tbody>';
+    document.getElementById('tbl').innerHTML=h;
+  }
+  document.querySelectorAll('.pick').forEach(function(p){
+    p.addEventListener('click',function(){
+      var i=parseInt(p.getAttribute('data-i'));
+      var at=sel.indexOf(i);
+      if(at>-1){ if(sel.length<=2){return;} sel.splice(at,1);p.classList.remove('on'); }
+      else{ if(sel.length>=3){return;} sel.push(i);p.classList.add('on'); }
+      sel.sort(function(a,b){return a-b;});render();
+    });
+  });
+  render();
+</script>
+</body>
+</html>
