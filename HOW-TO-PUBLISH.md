@@ -28,7 +28,7 @@ A plain-English guide for sending your designs and specs to the build team as **
 3. Drag the **whole `codeaza-spacelink-specs` folder** onto the drop zone — the folder, not the individual files, and not a zip.
 4. Netlify gives you a random link. Open **Site configuration → Change site name** and rename it to:
    `codeaza-spacelink-specs`
-   → your link becomes **codeaza-spacelink-specs.netlify.app**
+   → your link becomes **codeaza-spacelinq-specs.netlify.app**
 5. Open the link to check it works, then send that one link to Muhammad and the team.
 
 That single link now shows the hub, and every spec and prototype is one click away.

@@ -5,7 +5,7 @@ prepared for the Codeaza build team.
 
 ## Live site
 Published automatically to Netlify on every push to `main`:
-**https://codeaza-spacelink-specs.netlify.app**
+**https://codeaza-spacelinq-specs.netlify.app**
 
 ## Structure
 - `public/` — the live web pages (this is what Netlify serves)
